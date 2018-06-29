@@ -1,0 +1,35 @@
+.calculator{
+  width: 300px;
+  height: 400px;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: space-around;
+
+  &__window{
+    width: 73%;
+    height: 15%;
+    background-color: #ccc;
+    border-radius: 5px;
+    text-align: right;
+    padding: 23px 10px;
+    box-sizing: border-box;
+  }
+  &__numeric{
+    width: 21%;
+    height: 15%;
+    border-radius: 5px;
+  }
+  &__operator{
+    @extend .calculator__numeric;
+  }
+  &__equals{
+    @extend .calculator__numeric;
+  }
+  &__clear{
+    @extend .calculator__numeric;
+  }
+}

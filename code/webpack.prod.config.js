@@ -1,14 +1,14 @@
 const path              = require('path');
 const ExtractTextPlugin = require ('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-let   FaviconsWebpack   = require('favicons-webpack-plugin');
-var   sass              = require('sass');
+let 	FaviconsWebpack   = require('favicons-webpack-plugin');
+var 	sass              = require('sass');
 const constants         = require("./constants");
 
 
 var clientConfig = (function webpackConfig() {
   var config = Object.assign({});
-  config.mode = 'development',
+  config.mode = 'production',
   config.entry = ['./src/js/index.js','./src/scss/index.scss',];
   config.output = {path: path.resolve(__dirname, 'dist'), filename: 'js/main.js'};
 	config.devtool = 'source-map';
@@ -24,8 +24,8 @@ var clientConfig = (function webpackConfig() {
 				use: ExtractTextPlugin.extract({
 				fallback: "style-loader",
 					use:[
-						{loader: 'css-loader', options: {url: false,minimize: false,sourceMap: true}},
-						{loader: 'sass-loader', options: {sourceMap: true}}
+						{loader: 'css-loader', options: {url: false,minimize: true,sourceMap: false}},
+						{loader: 'sass-loader', options: {sourceMap: false}}
 					],	publicPath:'./css/'
 				})
 			}/*,
@@ -53,28 +53,28 @@ var clientConfig = (function webpackConfig() {
 	  }),      
 	  new HtmlWebpackPlugin({
 	    files: {
-        "css": [ "index.css" ],
-				"js" : [ "js/main.js"],
-				"chunks": {	"head": {"entry": "", "css": [ "css/index.css" ]},
-										"main": {"entry": "js/main.js", "css": []}},
+          "css": [ "index.css" ],
+		  "js" : [ "js/main.js"],
+		  "chunks": {"head": {"entry": "",           "css": [ "css/index.css" ]},
+                     "main": {"entry": "js/main.js", "css": []}},
 	    },
 	    title: constants.HTML_TITLE,
 	    author: constants.HTML_AUTHOR,
-	    //minify: {collapseWhitespace: true},
+	    minify: {collapseWhitespace: true},
 	    filename: '../dist/index.html',
 	    template: './src/html/template/index.html'
         }),
 	  new FaviconsWebpack({
-      logo: './src/img/favicon.jpg',  
-      prefix: 'favicon/',    
-      emitStats: false,    
-      statsFilename: 'iconstats-[hash].json',
-      persistentCache: true,
-      inject: true, 
+        logo: './src/img/favicon.jpg', 
+        prefix: 'favicon/',    
+        emitStats: false,    
+        statsFilename: 'iconstats-[hash].json',
+        persistentCache: true,
+        inject: true, 
 	    background: '#fff',
-      title: 'Webpack App',
-	    icons: {android: false,appleIcon: false,appleStartup: false,coast: false,favicons: true,
-                firefox: true, opengraph: false,twitter: false,yandex: false,windows: false}
+        title: 'Webpack App',
+	    icons: {android: true,appleIcon: false,appleStartup: false,coast: false,favicons: true,
+                firefox: true, opengraph: false,twitter: false,yandex: false,windows: true}
 	  })
 	]
 	/*config.plugins.push(

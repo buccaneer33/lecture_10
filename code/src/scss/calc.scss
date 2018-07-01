@@ -1,15 +1,15 @@
 .calculator{
-  width: 300px;
-  height: 400px;
+  width: 450px;
+  height: 370px;
   border-radius: 10px;
-  padding: 10px;
+  padding: 30px 10px 10px 10px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: stretch;
   justify-content: space-around;
 
-  &__window{
+  &__display{
     width: 73%;
     height: 15%;
     background-color: #ccc;
@@ -17,19 +17,74 @@
     text-align: right;
     padding: 23px 10px;
     box-sizing: border-box;
+    font-size: 20px;
+    transition: all 0.3s;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
-  &__numeric{
+  &__num{
     width: 21%;
     height: 15%;
     border-radius: 5px;
+    font-size: 25px;
   }
-  &__operator{
-    @extend .calculator__numeric;
+  &__ops{
+    @extend .calculator__num;
   }
-  &__equals{
-    @extend .calculator__numeric;
+  &__result{
+    @extend .calculator__num;
   }
   &__clear{
-    @extend .calculator__numeric;
+    @extend .calculator__num;
+
+  }
+}
+.broken {
+  animation: broken 2s;
+  transform: translate3d(0,-2000px,0);
+  opacity: 0;
+}
+@keyframes broken {
+  0% {
+    transform: rotate(-5deg);
+    opacity: 1;
+  }
+
+  5% {
+    transform: rotate(5deg);
+  }
+
+  15% {
+    transform: rotate(-7deg);
+  }
+
+  20% {
+    transform: rotate(7deg);
+  }
+
+  25% {
+    transform: rotate(-30deg);
+  }
+
+  50% {
+    transform: rotate(30deg);
+  }
+
+  60% {
+
+
+    transform: translate3d(0,0,0);
+  }
+  70% {
+    transform: translate3d(0,2000px,0);
+    opacity: 1;
+  }
+
+  75% {
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate3d(0,-2000px,0);
   }
 }

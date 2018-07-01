@@ -6,3 +6,7 @@
 .calculator--theme{
   background-color: $calc__bgc--color;
 }
+.button--clear{
+  background-color: $button__clear--color;
+  color:$calc__font--color;
+}

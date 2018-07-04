@@ -4,10 +4,10 @@
   "description": "Calculator",
   "main": "index.js",
   "scripts": {
-		"test": "echo \"test\" && exit 1",
+		"test" : "echo \"test\" && exit 1",
     "build": "webpack --mode production --config webpack.prod.config.js",
-    "dev": "webpack --mode development",
-    "watch": "webpack --watch --mode development"
+    "dev"  : "webpack --mode development --config webpack.config.js",
+    "watch": "webpack --watch --mode development --config webpack.config.js"
   },
   "repository": {
     "type": "git",

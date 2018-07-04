@@ -31,26 +31,26 @@ var clientConfig = (function webpackConfig() {
 			}/*,
 			{test: /\.(png|jpg|gif|svg)$/,
 				use: [
-					{loader: 'file-loader', 
-					options: {name: './img/[name].[ext]', 
+					{loader: 'file-loader',
+					options: {name: './img/[name].[ext]',
 					context: path.resolve(__dirname, "./img")}
 					}]
 			},
 			{test: /\.(ttf|eot|woff|woff2)$/,
 				use:
-					{loader: "file-loader", 
-					options: {name: "[name].[ext]", 
-					context: path.resolve(__dirname, "./fonts")}} 
+					{loader: "file-loader",
+					options: {name: "[name].[ext]",
+					context: path.resolve(__dirname, "./fonts")}}
 			}*/
 		]
   }
 	config.resolve = {};
-	
+
 	config.plugins = [
 	  new ExtractTextPlugin({
 	    filename:'./css/index.css',
-	    allChunks: true, 
-	  }),      
+	    allChunks: true,
+	  }),
 	  new HtmlWebpackPlugin({
 	    files: {
         "css": [ "index.css" ],
@@ -65,12 +65,12 @@ var clientConfig = (function webpackConfig() {
 	    template: './src/html/template/index.html'
         }),
 	  new FaviconsWebpack({
-      logo: './src/img/favicon.jpg',  
-      prefix: 'favicon/',    
-      emitStats: false,    
+      logo: './src/img/favicon/favicon.jpg',
+      prefix: 'img/favicon/',
+      emitStats: false,
       statsFilename: 'iconstats-[hash].json',
       persistentCache: true,
-      inject: true, 
+      inject: true,
 	    background: '#fff',
       title: 'Webpack App',
 	    icons: {android: false,appleIcon: false,appleStartup: false,coast: false,favicons: true,
@@ -84,7 +84,7 @@ var clientConfig = (function webpackConfig() {
 		new Plugin()
 	)*/
 
-	
+
 return config;
 });
 module.exports = clientConfig;

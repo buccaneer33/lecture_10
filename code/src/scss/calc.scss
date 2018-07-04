@@ -1,6 +1,6 @@
 .calculator{
-  width: 450px;
-  height: 370px;
+	width: 450px;
+	height: 500px;
   border-radius: 10px;
   padding: 30px 10px 10px 10px;
   display: flex;
@@ -9,10 +9,13 @@
   align-items: stretch;
   justify-content: space-around;
 
+	&__menu{
+		width: 96%;
+	}
+
   &__display{
-    width: 73%;
+    width: 96%;
     height: 15%;
-    background-color: #ccc;
     border-radius: 5px;
     text-align: right;
     padding: 23px 10px;
@@ -24,7 +27,7 @@
   }
   &__num{
     width: 21%;
-    height: 15%;
+    height: 11%;
     border-radius: 5px;
     font-size: 25px;
   }

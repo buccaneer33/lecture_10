@@ -86,82 +86,81 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/js/api.js":
-/*!***********************!*\
-  !*** ./src/js/api.js ***!
-  \***********************/
+/***/ "./src/js/calc.js":
+/*!************************!*\
+  !*** ./src/js/calc.js ***!
+  \************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-//console.log("It's ALIVE!!");
 (function () {
   "use strict";
 
-  // ярлыки для быстрого разначения
+  /* ярлыки для быстрого разначения */
 
   var el = function el(element) {
     if (element.charAt(0) === "#") {
-      // Если выпала решетка
-      return document.querySelector(element); // возвращаем единичный элемент
+      /* Если выпала решетка */
+      return document.querySelector(element); /* возвращаем единичный элемент */
     }
 
-    return document.querySelectorAll(element); // в противном случае возвращаем лист
+    return document.querySelectorAll(element); /* в противном случае возвращаем лист */
   };
 
-  // Создаем переменные
+  /* Создаем переменные */
   var display = el("#display"),
-      //дисплей калькулятора
+      /* дисплей калькулятора */
   result = el("#result"),
-      // кнопка равно
+      /* кнопка равно */
   calculatorNum = el(".calculator__num"),
-      // книпки чисел
+      /* книпки чисел */
   calculatorOps = el(".calculator__ops"),
-      // кнопки операторов
+      /* кнопки операторов */
   resNum,
-      //Для сохранения результата
+      /* Для сохранения результата */
   oldNum = "",
-      // сюда кладем первый операнд
+      /* сюда кладем первый операнд */
   currNum = "",
-      // сюда последующий операнд
-  operator; // какой оператор будем использовать
+      /* сюда последующий операнд */
+  operator; /* какой оператор будем использовать */
 
-  // если: клик по числу
+  /* если: клик по числу */
   var setNum = function setNum() {
     if (resNum) {
-      // number если на дисплее отражен результат
-      //  console.log(resNum);
-      currNum = this.getAttribute("data-num"); //заносим в переменную
-      //  console.log(currNum);
+      /* number если на дисплее отражен результат */
+      /*  console.log(resNum); */
+      currNum = this.getAttribute("data-num"); /* заносим в переменную */
+      /*  console.log(currNum); */
       resNum = "";
     } else {
-      // если нет, добавляем число в  предыдущий операнд
+      /* если нет, добавляем число в  предыдущий операнд */
       currNum += this.getAttribute("data-num");
     }
-    display.innerHTML = currNum; // Отобразить второй операнд
+    display.innerHTML = currNum; /* Отобразить второй операнд */
   };
 
-  // если: клик был по оператору. записываем число в oldNum и сохраняем значение оператора
+  /* если: клик был по оператору. записываем число в oldNum и сохраняем значение оператора */
   var moveNum = function moveNum() {
     oldNum = currNum;
     currNum = "";
-    //  console.log(oldNum);
+    /*  console.log(oldNum); */
     operator = this.getAttribute("data-ops");
-    result.setAttribute("data-result", ""); // сбрасываем аттрибут на =
+    result.setAttribute("data-result", ""); /* сбрасываем аттрибут на = */
   };
 
-  // если: клик был по =. вычисляем результат
+  /* если: клик был по =. вычисляем результат */
   var displayNum = function displayNum() {
 
-    // выполняем преобразование в числа с плавающей точкой
+    /* выполняем преобразование в числа с плавающей точкой */
     oldNum = parseFloat(oldNum);
     currNum = parseFloat(currNum);
-    //console.log(oldNum);
-    //console.log(currNum);
+    /* console.log(oldNum); */
+    /* console.log(currNum);*/
 
-    // выполняем операцию
+    /* выполняем операцию */
     switch (operator) {
       case "plus":
         resNum = oldNum + currNum;
@@ -179,34 +178,34 @@
         resNum = oldNum / currNum;
         break;
 
-      // если = был нажат без оператора, сохраняем число и гоним дальше
+      /* если = был нажат без оператора, сохраняем число и гоним дальше */
       default:
         resNum = currNum;
     }
 
-    // если результат вычислений вернул NaN или бесконечность
-    //console.log(resNum);
+    /* если результат вычислений вернул NaN или бесконечность */
+    /* console.log(resNum); */
     if (!isFinite(resNum)) {
       if (isNaN(resNum)) {
-        // если результат NaN
+        /* если результат NaN */
         resNum = "Wrong result";
       } else {
-        // если в результате деления на ноль результат бесконечность
+        /* если в результате деления на ноль результат бесконечность */
         resNum = "Divide by ZERO!!!!";
-        el('#calculator').classList.add("broken"); // ломаем калькулятор
+        el('#calculator').classList.add("broken"); /* ломаем калькулятор */
       }
     }
 
-    // если результат получен и он не NaN и не бесконечность показываем результат
+    /* если результат получен и он не NaN и не бесконечность показываем результат */
     display.innerHTML = resNum;
     result.setAttribute("data-result", resNum);
 
-    // и обнуление переменных
+    /* и обнуление переменных */
     oldNum = 0;
     currNum = resNum;
   };
 
-  // клик по кнопке С. обнуляем все.
+  /* клик по кнопке С. обнуляем все. */
   var clearAll = function clearAll() {
     oldNum = "";
     currNum = "";
@@ -216,22 +215,87 @@
 
   /* отслеживаем эвенты */
 
-  // эвент на клик числа
+  /* эвент на клик числа */
   for (var i = 0, l = calculatorNum.length; i < l; i++) {
     calculatorNum[i].onclick = setNum;
   }
 
-  // эвент на клик оператора
+  /* эвент на клик оператора */
   for (var i = 0, l = calculatorOps.length; i < l; i++) {
     calculatorOps[i].onclick = moveNum;
   }
 
-  // эвент на клик равно
+  /* эвент на клик равно */
   result.onclick = displayNum;
 
-  // клик на С
+  /* клик на С */
   el("#clear").onclick = clearAll;
 })();
+
+/***/ }),
+
+/***/ "./src/js/chTheme.js":
+/*!***************************!*\
+  !*** ./src/js/chTheme.js ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+(function () {
+  'use strict';
+
+  var getCalcLight = function getCalcLight() {
+    document.getElementById('calculator').classList.add("calculator--theme-light");
+  };
+  var getCalcDark = function getCalcDark() {
+    document.getElementById('calculator').classList.remove("calculator--theme-light");
+  };
+
+  function changeTheme(elem) {
+    this.dark = function () {
+      getCalcDark();
+    };
+    this.light = function () {
+      getCalcLight();
+    };
+    var self = this;
+    elem.onclick = function (e) {
+      var target = e.target;
+      var action = target.getAttribute('data-theme');
+      if (action) {
+        self[action]();
+      }
+    };
+  };
+  new changeTheme(submenu__radios);
+})();
+
+/***/ }),
+
+/***/ "./src/js/img.js":
+/*!***********************!*\
+  !*** ./src/js/img.js ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//import '../img/Calculator.png';
+//import '../../assets/slider/2.jpg';
+//import '../../assets/slider/3.jpg';
+//import '../../assets/slider/4.jpg';
+//import '../../assets/slider/5.jpg';
+//import '../../assets/slider/6.jpg';
+//import '../../assets/news/img1.jpg';
+//import '../../assets/news/img2.jpg';
+//import '../../assets/news/img3.jpg';
+//import '../../assets/latest/dance.jpg';
+//import '../../assets/img8.jpg';
+//import '../../assets/img9.jpg';
 
 /***/ }),
 
@@ -244,8 +308,13 @@
 
 "use strict";
 
+//import './api.js';
 
-__webpack_require__(/*! ./api.js */ "./src/js/api.js");
+__webpack_require__(/*! ./img.js */ "./src/js/img.js");
+
+__webpack_require__(/*! ./calc.js */ "./src/js/calc.js");
+
+__webpack_require__(/*! ./chTheme.js */ "./src/js/chTheme.js");
 
 /***/ }),
 

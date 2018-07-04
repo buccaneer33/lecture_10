@@ -1,5 +1,5 @@
 'use strict';
-//import '../../assets/slider/1.jpg';
+//import '../img/Calculator.png';
 //import '../../assets/slider/2.jpg';
 //import '../../assets/slider/3.jpg';
 //import '../../assets/slider/4.jpg';

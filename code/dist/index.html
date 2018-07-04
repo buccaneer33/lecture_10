@@ -3,32 +3,94 @@
 <head>
 	<meta charset="UTF-8">
   <title>Lecture_10</title>
-<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png"><link rel="shortcut icon" href="favicon/favicon.ico"><link href="./css/index.css" rel="stylesheet"></head>
+<link href="./css/index.css" rel="stylesheet"></head>
 <body class="body body--theme">
-	<div class="calculator calculator--theme" id="calculator">
-		<button id="clear" class="calculator__clear button--clear">C</button>
+	<header class="header">
+		<div class="wrapper">
+			<div class="header__info-block">
+				<div class="header__logo"><img class="header__image" src="img/Calculator.png" /></div>
+				<div class="header__name-block">
+					<h1 class="header__name">Калькулятор</h1>
+					<span class="header__slogan">Обычный или инженерный</span>
+				</div>
+			</div>
+		</div>
+	</header>
+	<main class="main">
+		<section class="wrapper">
+			<div class="calculator calculator--theme-dark" id="calculator">
+			<nav class="calculator__menu">
+				<ul class="nav">
+					<li class="nav__item submenu--open">Вид
+						<ul class="nav__submenu submenu">
+							<li class="submenu__item">Тема офрмления:
+								<div id="submenu__radios" class="submenu__radios">
+								  <div>
+								    <input type="radio" data-theme="dark" id="color--dark" name="color" value="dark" checked>
+								    <label for="color--dark">
+								      <span>
+								        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg" alt="Checked Icon" />
+								      </span>
+								    </label>
+								  </div>
 
-		<div id="display" class="calculator__display">0</div>
+								  <div>
+								    <input type="radio" data-theme="light" id="color--light" name="color" value="light">
+								    <label for="color--light">
+								      <span>
+								        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg" alt="Checked Icon" />
+								      </span>
+								    </label>
+								  </div>
+								</div>
+							</li>
+							<li class="submenu__item">Тип</li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
 
-		<button class="calculator__num" data-num="7">7</button>
-		<button class="calculator__num" data-num="8">8</button>
-		<button class="calculator__num" data-num="9">9</button>
-		<button data-ops="plus" class="calculator__ops">+</button>
 
-		<button class="calculator__num" data-num="4">4</button>
-		<button class="calculator__num" data-num="5">5</button>
-		<button class="calculator__num" data-num="6">6</button>
-		<button data-ops="minus" class="calculator__ops">-</button>
+				<div id="display" class="calculator__display">0</div>
 
-		<button class="calculator__num" data-num="1">1</button>
-		<button class="calculator__num" data-num="2">2</button>
-		<button class="calculator__num" data-num="3">3</button>
-		<button data-ops="times" class="calculator__ops">*</button>
+				<button id="clear" class="calculator__clear button--clear">C</button>
+				<button  data-ops="reverse" class="calculator__ops">&plusmn;</button>
+				<button  data-ops="root" class="calculator__ops">&radic;</button>
+				<button  data-ops="procent" class="calculator__ops">&#37;</button>
 
-		<button class="calculator__num" data-num="0">0</button>
-		<button class="calculator__num" data-num=".">.</button>
-		<button id="result" class="calculator__result" data-result="">=</button>
-		<button data-ops="divided by" class="calculator__ops">/</button>
-	</div>
+				<button class="calculator__num" data-num="7">7</button>
+				<button class="calculator__num" data-num="8">8</button>
+				<button class="calculator__num" data-num="9">9</button>
+				<button data-ops="plus" class="calculator__ops">+</button>
+
+				<button class="calculator__num" data-num="4">4</button>
+				<button class="calculator__num" data-num="5">5</button>
+				<button class="calculator__num" data-num="6">6</button>
+				<button data-ops="minus" class="calculator__ops">-</button>
+
+				<button class="calculator__num" data-num="1">1</button>
+				<button class="calculator__num" data-num="2">2</button>
+				<button class="calculator__num" data-num="3">3</button>
+				<button data-ops="times" class="calculator__ops">*</button>
+
+				<button class="calculator__num" data-num="0">0</button>
+				<button class="calculator__num" data-num=".">.</button>
+				<button id="result" class="calculator__result" data-result="">=</button>
+				<button data-ops="divided by" class="calculator__ops">/</button>
+			</div>
+		</section>
+	</main>
+
+	<footer class="footer">
+		<div class="wrapper footer__wrapper">
+			<div class="footer__rights">
+				Copyright © 2018 - All Rights Reserved
+			</div>
+			<div class="footer__disigned-by">
+				Template by Buccaneer
+			</div>
+
+		</div>
+	</footer>
 <script type="text/javascript" src="js/main.js"></script></body>
 </html>

@@ -1,6 +1,8 @@
 
 (function() {
   "use strict";
+	var  utils = require('./utils');
+	var  getOperandChar = require('./getOperand');
 
   /* ярлыки для быстрого разначения */
   var el = function(element) {
@@ -13,6 +15,7 @@
 
   /* Создаем переменные */
   var display       = el("#display"),         /* дисплей калькулятора */
+			displayUpper  = el('#displayUpper'),     /* верхний дисплей */
       result        = el("#result"),          /* кнопка равно */
       calculatorNum = el(".calculator__num"), /* книпки чисел */
       calculatorOps = el(".calculator__ops"), /* кнопки операторов */
@@ -39,7 +42,32 @@
     oldNum = currNum;
     currNum = "";
     /*  console.log(oldNum); */
+
     operator = this.getAttribute("data-ops");
+		//alert(operator);
+		var opChar;
+		switch (operator) {
+      case "plus":
+			opChar = '+';
+        break;
+
+      case "minus":
+				opChar = '-';
+        break;
+
+      case "times":
+				opChar = '*';
+        break;
+
+      case "divided by":
+			opChar = '/';
+        break;
+
+      default:
+        opChar = '.';
+				alert(opChar);
+    }
+		displayUpper.innerHTML =  opChar; /* заносим операнд в дисплей */
     result.setAttribute("data-result", ""); /* сбрасываем аттрибут на = */
   };
 
@@ -55,19 +83,19 @@
     /* выполняем операцию */
     switch (operator) {
       case "plus":
-        resNum = oldNum + currNum;
+			resNum = utils.sum(oldNum, currNum);
         break;
 
       case "minus":
-        resNum = oldNum - currNum;
+				resNum = utils.minus(oldNum, currNum);
         break;
 
       case "times":
-        resNum = oldNum * currNum;
+				resNum = utils.times(oldNum, currNum);
         break;
 
       case "divided by":
-        resNum = oldNum / currNum;
+				resNum = utils.divide(oldNum, currNum);
         break;
 
         /* если = был нажат без оператора, сохраняем число и гоним дальше */
@@ -88,6 +116,7 @@
 
     /* если результат получен и он не NaN и не бесконечность показываем результат */
     display.innerHTML = resNum;
+		displayUpper.innerHTML = "."
     result.setAttribute("data-result", resNum);
 
     /* и обнуление переменных */
@@ -100,6 +129,7 @@
     oldNum = "";
     currNum = "";
     display.innerHTML = "0";
+		displayUpper.innerHTML = "."
     result.setAttribute("data-result", resNum);
   };
 

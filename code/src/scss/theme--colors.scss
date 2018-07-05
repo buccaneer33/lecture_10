@@ -20,7 +20,7 @@
 	  background-color: $button__clear--color;
 	  color:$calc__font--color;
 	}
-	&>.calculator__display{
+	&>.calculator__display-block{
 		background-color: #ccc;
 		color: $body__font--color;
 	}
@@ -57,7 +57,7 @@
 			background: linear-gradient(to bottom, $button__clear--color 0%,darken($button__clear--color, 10%) 100%);
 			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$button__clear--color', endColorstr='darken($button__clear--color, 10%)',GradientType=0 );
 		}
-		&>.calculator__display{
+		&>.calculator__display-block{
 	background-color: darken($calc__bgc--light, 5%);
 	box-shadow: 1px 1px 2px 2px darken($calc__bgc--light, 30%),
 							-1px 1px 2px 2px darken($calc__bgc--light, 20%),

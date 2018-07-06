@@ -97,8 +97,6 @@
 
 
 (function () {
-  "use strict";
-
   var utils = __webpack_require__(/*! ./utils */ "./src/js/utils.js");
   var getOperandChar = __webpack_require__(/*! ./getOperand */ "./src/js/getOperand.js");
 
@@ -153,27 +151,27 @@
     /*  console.log(oldNum); */
 
     operator = this.getAttribute("data-ops");
-    //alert(operator);
+
     var opChar;
     switch (operator) {
       case "plus":
-        opChar = '+';
+        opChar = getOperandChar.plus;
         break;
 
       case "minus":
-        opChar = '-';
+        opChar = getOperandChar.minus;
         break;
 
       case "times":
-        opChar = '*';
+        opChar = getOperandChar.times;
         break;
 
-      case "divided by":
-        opChar = '/';
+      case "divide":
+        opChar = getOperandChar.divide;
         break;
 
       default:
-        opChar = '.';
+        opChar = '&nbsp';
         alert(opChar);
     }
     displayUpper.innerHTML = opChar; /* заносим операнд в дисплей */
@@ -190,7 +188,9 @@
     /* console.log(currNum);*/
 
     /* выполняем операцию */
+
     switch (operator) {
+
       case "plus":
         resNum = utils.sum(oldNum, currNum);
         break;
@@ -203,7 +203,8 @@
         resNum = utils.times(oldNum, currNum);
         break;
 
-      case "divided by":
+      case "divide":
+
         resNum = utils.divide(oldNum, currNum);
         break;
 
@@ -227,7 +228,7 @@
 
     /* если результат получен и он не NaN и не бесконечность показываем результат */
     display.innerHTML = resNum;
-    displayUpper.innerHTML = ".";
+    displayUpper.innerHTML = "&nbsp";
     result.setAttribute("data-result", resNum);
 
     /* и обнуление переменных */
@@ -240,7 +241,7 @@
     oldNum = "";
     currNum = "";
     display.innerHTML = "0";
-    displayUpper.innerHTML = ".";
+    displayUpper.innerHTML = "&nbsp";
     result.setAttribute("data-result", resNum);
   };
 
@@ -314,31 +315,16 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* export switch (operator) {
-	case "plus":
-	res = '+';
-		break;
 
-	case "minus":
-	res = '-';
-		break;
 
-	case "times":
-		res = '*';
-		break;
+var getOperandChar = {
+	plus: '+',
+	minus: '-',
+	times: '*',
+	divide: '/'
+};
 
-	case "divided by":
-		res = '/';
-		break;
-
-	case "proc":
-		res = '%';
-		break;
-	default:
-		res = '.';
-}
-*/
-
+module.exports = getOperandChar;
 
 /***/ }),
 
@@ -376,10 +362,6 @@
 "use strict";
 
 
-__webpack_require__(/*! ./getOperand.js */ "./src/js/getOperand.js");
-
-__webpack_require__(/*! ./utils.js */ "./src/js/utils.js");
-
 __webpack_require__(/*! ./img.js */ "./src/js/img.js");
 
 __webpack_require__(/*! ./calc.js */ "./src/js/calc.js");
@@ -398,25 +380,23 @@ __webpack_require__(/*! ./chTheme.js */ "./src/js/chTheme.js");
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-		value: true
-});
-exports.sum = sum;
-exports.minus = minus;
-exports.times = times;
-exports.divide = divide;
-function sum(op1, op2) {
-		return exports.sum = sum = op1 + op2;
+var sum = function sum(op1, op2) {
+	var res = op1 + op2;
+	return res;
 };
-function minus(op1, op2) {
-		return exports.minus = minus = op1 - op2;
+var minus = function minus(op1, op2) {
+	var res = op1 - op2;
+	return res;
 };
-function times(op1, op2) {
-		return exports.times = times = op1 * op2;
+var times = function times(op1, op2) {
+	var res = op1 * op2;
+	return res;
 };
-function divide(op1, op2) {
-		return exports.divide = divide = op1 / op2;
+var divide = function divide(op1, op2) {
+	var res = op1 / op2;
+	return res;
 };
+module.exports = { sum: sum, minus: minus, times: times, divide: divide };
 /*
 export function reverse(op1){
 	return reverse = op1 / op2;

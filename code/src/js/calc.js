@@ -1,6 +1,5 @@
-
+"use strict";
 (function() {
-  "use strict";
 	var  utils = require('./utils');
 	var  getOperandChar = require('./getOperand');
 
@@ -44,27 +43,27 @@
     /*  console.log(oldNum); */
 
     operator = this.getAttribute("data-ops");
-		//alert(operator);
+
 		var opChar;
 		switch (operator) {
       case "plus":
-			opChar = '+';
+			opChar = getOperandChar.plus;
         break;
 
       case "minus":
-				opChar = '-';
+				opChar = getOperandChar.minus;
         break;
 
       case "times":
-				opChar = '*';
+				opChar = getOperandChar.times;
         break;
 
-      case "divided by":
-			opChar = '/';
+      case "divide":
+			opChar = getOperandChar.divide;
         break;
 
       default:
-        opChar = '.';
+        opChar = '&nbsp';
 				alert(opChar);
     }
 		displayUpper.innerHTML =  opChar; /* заносим операнд в дисплей */
@@ -81,7 +80,10 @@
     /* console.log(currNum);*/
 
     /* выполняем операцию */
+
     switch (operator) {
+
+
       case "plus":
 			resNum = utils.sum(oldNum, currNum);
         break;
@@ -94,7 +96,8 @@
 				resNum = utils.times(oldNum, currNum);
         break;
 
-      case "divided by":
+      case "divide":
+
 				resNum = utils.divide(oldNum, currNum);
         break;
 
@@ -116,7 +119,7 @@
 
     /* если результат получен и он не NaN и не бесконечность показываем результат */
     display.innerHTML = resNum;
-		displayUpper.innerHTML = "."
+		displayUpper.innerHTML = "&nbsp"
     result.setAttribute("data-result", resNum);
 
     /* и обнуление переменных */
@@ -129,7 +132,7 @@
     oldNum = "";
     currNum = "";
     display.innerHTML = "0";
-		displayUpper.innerHTML = "."
+		displayUpper.innerHTML = "&nbsp"
     result.setAttribute("data-result", resNum);
   };
 

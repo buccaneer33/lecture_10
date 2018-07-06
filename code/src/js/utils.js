@@ -1,15 +1,21 @@
-export function sum(op1, op2){
-		return sum  = op1 + op2;
+"use strict";
+ var sum = function (op1, op2){
+	var res = op1 + op2;
+	return res;
+};
+ var minus = function (op1, op2){
+		var res = op1 - op2;
+		return res;
 	};
-export function minus(op1, op2){
-		return minus = op1 - op2;
+var times = function (op1, op2){
+		var res = op1 * op2;
+		return res;
+};
+var divide = function divide(op1, op2){
+		var res = op1 / op2;
+		return res;
 	};
-export function times(op1, op2){
-		return times = op1 * op2;
-	};
-export function divide(op1, op2){
-		return divide = op1 / op2;
-	};
+	module.exports = {sum, minus, times, divide};
 	/*
 export function reverse(op1){
 		return reverse = op1 / op2;

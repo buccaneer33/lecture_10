@@ -96,7 +96,8 @@
 "use strict";
 
 
-(function () {
+function Calculator() {
+
    var utils = __webpack_require__(/*! ./utils */ "./src/js/utils.js");
    var getOperandChar = __webpack_require__(/*! ./getOperand */ "./src/js/getOperand.js");
 
@@ -106,7 +107,6 @@
          /* Если выпала решетка */
          return document.querySelector(element); /* возвращаем единичный элемент */
       }
-
       return document.querySelectorAll(element); /* в противном случае возвращаем лист */
    };
 
@@ -220,7 +220,7 @@
       if (!proc) {
          displayUpper.innerHTML += opChar; /* заносим операнд в дисплей */
       } else {
-         displayUpper.innerHTML = getOperandChar.proc;
+         displayUpper.innerHTML += getOperandChar.proc;
       };
 
       result.setAttribute("data-result", ""); /* сбрасываем аттрибут на = */
@@ -324,24 +324,37 @@
       proc = false;
    };
 
-   /* отслеживаем эвенты */
+   this.run = function () {
+      /* на запуске отслеживаем эвенты */
 
-   /* эвент на клик числа */
-   for (var i = 0, l = calculatorNum.length; i < l; i++) {
-      calculatorNum[i].onclick = setNum;
-   }
+      /* эвент на клик числа */
+      for (var i = 0, l = calculatorNum.length; i < l; i++) {
+         calculatorNum[i].onclick = setNum;
+      }
 
-   /* эвент на клик оператора */
-   for (var i = 0, l = calculatorOps.length; i < l; i++) {
-      calculatorOps[i].onclick = moveNum;
-   }
+      /* эвент на клик оператора */
+      for (var i = 0, l = calculatorOps.length; i < l; i++) {
+         calculatorOps[i].onclick = moveNum;
+      }
 
-   /* эвент на клик равно */
-   result.onclick = displayNum;
+      /* эвент на клик равно */
+      result.onclick = displayNum;
 
-   /* клик на С */
-   el("#clear").onclick = clearAll;
-})();
+      /* клик на С */
+      el("#clear").onclick = clearAll;
+   };
+};
+
+function IngCalculator() {
+   Calculator.call(this);
+};
+
+//var calculator = new Calculator();
+//calculator.run();
+
+var IngCalculator = new IngCalculator();
+
+IngCalculator.run();
 
 /***/ }),
 
@@ -438,6 +451,7 @@ var getOperandChar = {
 	minus: '-',
 	times: '*',
 	divide: '/',
+	proc: '%',
 	sqrt: '&radic;',
 	pow2: '&#178;',
 	pow3: '&#179;',

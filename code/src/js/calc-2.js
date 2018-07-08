@@ -1,17 +1,15 @@
 "use strict";
 
-function Calculator() {
-
+(function() {
 	var  utils = require('./utils');
 	var  getOperandChar = require('./getOperand');
-
-
 
   /* ярлыки для быстрого разначения */
   var el = function(element) {
     if (element.charAt(0) === "#") { /* Если выпала решетка */
     return document.querySelector(element); /* возвращаем единичный элемент */
     }
+
     return document.querySelectorAll(element); /* в противном случае возвращаем лист */
   };
 
@@ -105,7 +103,7 @@ function Calculator() {
 		if(!proc){
 			displayUpper.innerHTML +=  opChar; /* заносим операнд в дисплей */
 		} else {
-			displayUpper.innerHTML += getOperandChar.proc;
+			displayUpper.innerHTML = getOperandChar.proc;
 		};
 
     result.setAttribute("data-result", ""); /* сбрасываем аттрибут на = */
@@ -193,35 +191,22 @@ displayUpper.innerHTML +=  currNum;
 		proc = false;
   };
 
-	this.run = function(){
-		/* на запуске отслеживаем эвенты */
+  /* отслеживаем эвенты */
 
-		/* эвент на клик числа */
-		for (var i = 0, l = calculatorNum.length; i < l; i++) {
-			calculatorNum[i].onclick = setNum;
-		}
+  /* эвент на клик числа */
+  for (var i = 0, l = calculatorNum.length; i < l; i++) {
+    calculatorNum[i].onclick = setNum;
+  }
 
-		/* эвент на клик оператора */
-		for (var i = 0, l = calculatorOps.length; i < l; i++) {
-			calculatorOps[i].onclick = moveNum;
-		}
+  /* эвент на клик оператора */
+  for (var i = 0, l = calculatorOps.length; i < l; i++) {
+    calculatorOps[i].onclick = moveNum;
+  }
 
-		/* эвент на клик равно */
-		result.onclick = displayNum;
+  /* эвент на клик равно */
+  result.onclick = displayNum;
 
-		/* клик на С */
-		el("#clear").onclick = clearAll;
-	};
+  /* клик на С */
+  el("#clear").onclick = clearAll;
 
-};
-
-function IngCalculator(){
-	Calculator.call(this);
-};
-
-//var calculator = new Calculator();
- //calculator.run();
-
-var IngCalculator = new IngCalculator();
-
-	IngCalculator.run();
+}());

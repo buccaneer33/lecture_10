@@ -3,6 +3,7 @@ var getOperandChar = {
 	minus : '-',
 	times : '*',
 	divide: '/',
+	proc: '%',
 	sqrt: '&radic;',
 	pow2: '&#178;',
 	pow3: '&#179;',

@@ -44,7 +44,20 @@
 								  </div>
 								</div>
 							</li>
-							<li class="submenu__item">Тип</li>
+							<li class="submenu__item">Тип:
+								<div id="submenu__list" class="submenu__list">
+									<div>
+										<label for="mode--simple">
+											<input type="radio" data-mode="simple" id="mode--simple" name="mode" value="Простой" checked>
+											Простой</label>
+									</div>
+									<div>
+										<label for="mode--ing">
+											<input type="radio" data-mode="eng" id="mode--ing" name="mode" value="Инженерный">
+											Инженерный</label>
+									</div>
+								</div>
+							</li>
 						</ul>
 					</li>
 				</ul>
@@ -56,31 +69,47 @@
 					<div id="display" class="calculator__display">0</div>
 
 				</div>
+				<div class="programming display--none">
 
-				<button id="clear" class="calculator__clear button--clear">C</button>
-				<button  data-ops="reverse" class="calculator__ops">&plusmn;</button>
-				<button  data-ops="root" class="calculator__ops">&radic;</button>
-				<button  data-ops="procent" class="calculator__ops">&#37;</button>
+				</div>
+				<div id="ingeneer" class="ingeneer display--none">
+					<button data-ops="ln" class="calculator__ops">ln</button>
+					<button data-ops="log" class="calculator__ops">log</button>
+					<button data-ops="sin" class="calculator__ops">sin</button>
+					<button data-ops="cos" class="calculator__ops">cos</button>
+					<button data-ops="tan" class="calculator__ops">tan</button>
+					<button data-ops="factorial" class="calculator__ops">n!</button>
+					<button data-ops="powY" class="calculator__ops">x&#696;</button>
+					<button data-ops="root3" class="calculator__ops">&#8731;x</button>
+					<button data-ops="pow3" class="calculator__ops">x&#179;</button>
+					<button data-ops="powten" class="calculator__ops">10&#739;</button>
+				</div>
+				<div class="simple">
+					<button id="clear" class="calculator__clear button--clear">C</button>
+					<button  data-ops="pow2" class="calculator__ops">x&#178;</button>
+					<button  data-ops="sqrt" class="calculator__ops">&radic;</button>
+					<button id="proc"  data-ops="proc" class="calculator__ops">&#37;</button>
 
-				<button class="calculator__num" data-num="7">7</button>
-				<button class="calculator__num" data-num="8">8</button>
-				<button class="calculator__num" data-num="9">9</button>
-				<button data-ops="plus" class="calculator__ops">+</button>
+					<button class="calculator__num" data-num="7">7</button>
+					<button class="calculator__num" data-num="8">8</button>
+					<button class="calculator__num" data-num="9">9</button>
+					<button data-ops="plus" class="calculator__ops">+</button>
 
-				<button class="calculator__num" data-num="4">4</button>
-				<button class="calculator__num" data-num="5">5</button>
-				<button class="calculator__num" data-num="6">6</button>
-				<button data-ops="minus" class="calculator__ops">-</button>
+					<button class="calculator__num" data-num="4">4</button>
+					<button class="calculator__num" data-num="5">5</button>
+					<button class="calculator__num" data-num="6">6</button>
+					<button data-ops="minus" class="calculator__ops">-</button>
 
-				<button class="calculator__num" data-num="1">1</button>
-				<button class="calculator__num" data-num="2">2</button>
-				<button class="calculator__num" data-num="3">3</button>
-				<button data-ops="times" class="calculator__ops">*</button>
+					<button class="calculator__num" data-num="1">1</button>
+					<button class="calculator__num" data-num="2">2</button>
+					<button class="calculator__num" data-num="3">3</button>
+					<button data-ops="times" class="calculator__ops">*</button>
 
-				<button class="calculator__num" data-num="0">0</button>
-				<button class="calculator__num" data-num=".">.</button>
-				<button id="result" class="calculator__result" data-result="">=</button>
-				<button data-ops="divide" class="calculator__ops">/</button>
+					<button class="calculator__num" data-num="0">0</button>
+					<button class="calculator__num" data-num=".">.</button>
+					<button id="result" class="calculator__result" data-result="">=</button>
+					<button data-ops="divide" class="calculator__ops">/</button>
+				</div>
 			</div>
 		</section>
 	</main>

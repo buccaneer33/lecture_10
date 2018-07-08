@@ -1,4 +1,5 @@
 "use strict";
+
 (function() {
 	var  utils = require('./utils');
 	var  getOperandChar = require('./getOperand');
@@ -16,19 +17,18 @@
   var display       = el("#display"),         /* дисплей калькулятора */
 			displayUpper  = el('#displayUpper'),     /* верхний дисплей */
       result        = el("#result"),          /* кнопка равно */
-      calculatorNum = el(".calculator__num"), /* книпки чисел */
+      calculatorNum = el(".calculator__num"), /* кнопки чисел */
       calculatorOps = el(".calculator__ops"), /* кнопки операторов */
 	    resNum,                                 /* Для сохранения результата */
 	    oldNum = "",                            /* сюда кладем первый операнд */
       currNum = "",                           /* сюда последующий операнд */
-      operator;                               /* какой оператор будем использовать */
+      operator,                               /* какой оператор будем использовать */
+			proc					= false;		   						/* будем ли использовать проценты */
 
   /* если: клик по числу */
   var setNum = function() {
     if (resNum) { /* number если на дисплее отражен результат */
-    /*  console.log(resNum); */
     currNum = this.getAttribute("data-num"); /* заносим в переменную */
-    /*  console.log(currNum); */
     resNum = "";
 	} else { /* если нет, добавляем число в  предыдущий операнд */
     currNum += this.getAttribute("data-num");
@@ -38,68 +38,122 @@
 
   /* если: клик был по оператору. записываем число в oldNum и сохраняем значение оператора */
   var moveNum = function() {
-    oldNum = currNum;
-    currNum = "";
-    /*  console.log(oldNum); */
 
-    operator = this.getAttribute("data-ops");
+
+			if (this.getAttribute("data-ops")!=='proc'){
+				oldNum = currNum;
+				currNum = "";
+				displayUpper.innerHTML += oldNum;
+				operator = this.getAttribute("data-ops");
+
+			}
+			else{
+				proc = true;
+				displayUpper.innerHTML += currNum;
+			}
+
+
+
+	console.log("First= " + oldNum + "; opper= " + operator + "; Second= " + currNum + "; proc= " + proc);
+
+
+	/*	alert(operator); */
 
 		var opChar;
 		switch (operator) {
-      case "plus":
-			opChar = getOperandChar.plus;
-        break;
+      case "plus": opChar = getOperandChar.plus; break;
 
-      case "minus":
-				opChar = getOperandChar.minus;
-        break;
+      case "minus":	opChar = getOperandChar.minus; break;
 
-      case "times":
-				opChar = getOperandChar.times;
-        break;
+      case "times": opChar = getOperandChar.times; break;
 
-      case "divide":
-			opChar = getOperandChar.divide;
-        break;
+      case "divide": opChar = getOperandChar.divide; break;
+
+			case "sqrt": opChar = getOperandChar.sqrt; break;
+
+			case "pow2": opChar = getOperandChar.pow2; break;
+
+			case "powten": opChar = getOperandChar.powten; break;
+
+			case "pow3": opChar = getOperandChar.pow3; break;
+
+			case "root3": opChar = getOperandChar.root3;	break;
+
+			case "powY": opChar = getOperandChar.powY; break;
+
+			case "factorial": opChar = getOperandChar.fact; break;
+
+			case "tan": opChar = getOperandChar.tan; break;
+
+			case "cos": opChar = getOperandChar.cos; break;
+
+			case "sin": opChar = getOperandChar.sin; break;
+
+			case "log": opChar = getOperandChar.log; break;
+
+			case "ln": opChar = getOperandChar.ln; break;
+
+		//	console.log("First= " + oldNum + "; opper= " + operator + "; Second= " + currNum + "; proc= " + proc)
 
       default:
         opChar = '&nbsp';
-				alert(opChar);
     }
-		displayUpper.innerHTML =  opChar; /* заносим операнд в дисплей */
+
+
+		if(!proc){
+			displayUpper.innerHTML +=  opChar; /* заносим операнд в дисплей */
+		} else {
+			displayUpper.innerHTML = getOperandChar.proc;
+		};
+
     result.setAttribute("data-result", ""); /* сбрасываем аттрибут на = */
   };
 
   /* если: клик был по =. вычисляем результат */
   var displayNum = function() {
+displayUpper.innerHTML +=  currNum;
 
     /* выполняем преобразование в числа с плавающей точкой */
     oldNum = parseFloat(oldNum);
     currNum = parseFloat(currNum);
-    /* console.log(oldNum); */
-    /* console.log(currNum);*/
+
 
     /* выполняем операцию */
 
     switch (operator) {
 
 
-      case "plus":
-			resNum = utils.sum(oldNum, currNum);
-        break;
+      case "plus": resNum = utils.sum(oldNum, currNum, proc); break;
 
-      case "minus":
-				resNum = utils.minus(oldNum, currNum);
-        break;
+      case "minus": resNum = utils.minus(oldNum, currNum, proc); break;
 
-      case "times":
-				resNum = utils.times(oldNum, currNum);
-        break;
+      case "times": resNum = utils.times(oldNum, currNum, proc); break;
 
-      case "divide":
+      case "divide": resNum = utils.divide(oldNum, currNum, proc); break;
 
-				resNum = utils.divide(oldNum, currNum);
-        break;
+			case "sqrt": resNum = utils.sqrt(oldNum); break;
+
+			case "pow2": resNum = utils.pow2(oldNum); break;
+
+			case "powten": resNum = utils.powten(oldNum); break;
+
+			case "pow3": resNum = utils.pow3(oldNum); break;
+
+			case "root3": resNum = utils.root3(oldNum);	break;
+
+			case "powY": resNum = utils.powY(oldNum, currNum); break;
+
+			case "factorial": resNum = utils.factorial(oldNum); break;
+
+			case "tan": resNum = utils.tan(oldNum); break;
+
+			case "cos": resNum = utils.cos(oldNum); break;
+
+			case "sin": resNum = utils.sin(oldNum); break;
+
+			case "log": resNum = utils.log(oldNum); break;
+
+			case "ln": resNum = utils.ln(oldNum); break;
 
         /* если = был нажат без оператора, сохраняем число и гоним дальше */
       default:
@@ -107,7 +161,6 @@
     }
 
     /* если результат вычислений вернул NaN или бесконечность */
-     /* console.log(resNum); */
     if (!isFinite(resNum)) {
       if (isNaN(resNum)) { /* если результат NaN */
         resNum = "Wrong result";
@@ -124,6 +177,7 @@
 
     /* и обнуление переменных */
     oldNum = 0;
+		proc = false;
     currNum = resNum;
   };
 
@@ -134,6 +188,7 @@
     display.innerHTML = "0";
 		displayUpper.innerHTML = "&nbsp"
     result.setAttribute("data-result", resNum);
+		proc = false;
   };
 
   /* отслеживаем эвенты */

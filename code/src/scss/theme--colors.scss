@@ -6,21 +6,21 @@
 .calculator--theme-dark{
   background-color: $calc__bgc--dark;
 
-	&>.calculator__num{
+	& .calculator__num{
 		background-color: $button__bgc--color;
 		color: $body__font--color;
 	}
-	&>.calculator__ops{
+	& .calculator__ops{
 		@extend .calculator__num;
 	}
-	&>.calculator__result{
+	& .calculator__result{
 		@extend .calculator__num;
 	}
-	&>.button--clear{
+	& .button--clear{
 	  background-color: $button__clear--color;
 	  color:$calc__font--color;
 	}
-	&>.calculator__display-block{
+	& .calculator__display-block{
 		background-color: #ccc;
 		color: $body__font--color;
 	}
@@ -33,7 +33,7 @@
 							-2px -2px 2px 2px darken($calc__bgc--light, 0%)
 	;
 
-		&>.calculator__num{
+		& .calculator__num{
 			background-color: darken($calc__bgc--light, 5%);
 			box-shadow: 1px 1px 2px 2px darken($calc__bgc--light, 30%),
 									-1px 1px 2px 2px darken($calc__bgc--light, 20%),
@@ -44,24 +44,27 @@
 			background: linear-gradient(to bottom, darken($calc__bgc--light, 5%) 0%,darken($calc__bgc--light, 20%) 100%);
 			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='darken($calc__bgc--light, 5%)', endColorstr='darken($calc__bgc--light, 20%)',GradientType=0 );
 		}
-		&>.calculator__ops{
+		& .calculator__ops{
 			@extend .calculator__num;
 		}
-		&>.calculator__result{
+		& .calculator__result{
 			@extend .calculator__num;
 		}
-		&>.calculator__clear{
+		& .calculator__clear{
 			//background-color: $button__clear--color !important;
 		  color:$calc__font--color !important;
 			background: darken( $button__clear--color, 5%);
 			background: linear-gradient(to bottom, $button__clear--color 0%,darken($button__clear--color, 10%) 100%);
 			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$button__clear--color', endColorstr='darken($button__clear--color, 10%)',GradientType=0 );
 		}
-		&>.calculator__display-block{
+		& .calculator__display-block{
 	background-color: darken($calc__bgc--light, 5%);
 	box-shadow: 1px 1px 2px 2px darken($calc__bgc--light, 30%),
 							-1px 1px 2px 2px darken($calc__bgc--light, 20%),
 							1px -1px 2px 2px darken($calc__bgc--light, 10%),
 							-1px -1px 2px 2px darken($calc__bgc--light, 0%);
 		}
+}
+.display--none{
+	display: none;
 }

@@ -1,5 +1,5 @@
-	(function() {
-		'use strict';
+'use strict';
+(function() {
 var getCalcLight = function() {
 	document.getElementById('calculator').classList.add("calculator--theme-light");
 	};

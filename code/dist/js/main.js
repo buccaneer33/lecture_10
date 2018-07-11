@@ -98,255 +98,295 @@
 
 function Calculator() {
 
-   var utils = __webpack_require__(/*! ./utils */ "./src/js/utils.js");
-   var getOperandChar = __webpack_require__(/*! ./getOperand */ "./src/js/getOperand.js");
+		var utils = __webpack_require__(/*! ./utils */ "./src/js/utils.js");
+		var getOperandChar = __webpack_require__(/*! ./getOperand */ "./src/js/getOperand.js");
 
-   /* ярлыки для быстрого разначения */
-   var el = function el(element) {
-      if (element.charAt(0) === "#") {
-         /* Если выпала решетка */
-         return document.querySelector(element); /* возвращаем единичный элемент */
-      }
-      return document.querySelectorAll(element); /* в противном случае возвращаем лист */
-   };
+		var opChar;
+		var self = this;
+		self.operator = "";
+		self.getOperand = function (operator) {
+				switch (operator) {
+						case "plus":
+								opChar = getOperandChar.plus;break;
+						case "minus":
+								opChar = getOperandChar.minus;break;
+						case "times":
+								opChar = getOperandChar.times;break;
+						case "divide":
+								opChar = getOperandChar.divide;break;
+						case "sqrt":
+								opChar = getOperandChar.sqrt;break;
+						case "pow2":
+								opChar = getOperandChar.pow2;break;
 
-   /* Создаем переменные */
-   var display = el("#display"),
-       /* дисплей калькулятора */
-   displayUpper = el('#displayUpper'),
-       /* верхний дисплей */
-   result = el("#result"),
-       /* кнопка равно */
-   calculatorNum = el(".calculator__num"),
-       /* кнопки чисел */
-   calculatorOps = el(".calculator__ops"),
-       /* кнопки операторов */
-   resNum,
-       /* Для сохранения результата */
-   oldNum = "",
-       /* сюда кладем первый операнд */
-   currNum = "",
-       /* сюда последующий операнд */
-   operator,
-       /* какой оператор будем использовать */
-   proc = false; /* будем ли использовать проценты */
+						default:
+								opChar = '&nbsp';
+				}
+				return opChar;
+		};
 
-   /* если: клик по числу */
-   var setNum = function setNum() {
-      if (resNum) {
-         /* number если на дисплее отражен результат */
-         currNum = this.getAttribute("data-num"); /* заносим в переменную */
-         resNum = "";
-      } else {
-         /* если нет, добавляем число в  предыдущий операнд */
-         currNum += this.getAttribute("data-num");
-      }
-      display.innerHTML = currNum; /* Отобразить второй операнд */
-   };
+		/* ярлыки для быстрого разначения */
+		var el = function el(element) {
+				if (element.charAt(0) === "#") {
+						/* Если выпала решетка */
+						return document.querySelector(element); /* возвращаем единичный элемент */
+				}
+				return document.querySelectorAll(element); /* в противном случае возвращаем лист */
+		};
 
-   /* если: клик был по оператору. записываем число в oldNum и сохраняем значение оператора */
-   var moveNum = function moveNum() {
+		/* Создаем переменные */
+		var display = el("#display"),
+		    /* дисплей калькулятора */
+		displayUpper = el('#displayUpper'),
+		    /* верхний дисплей *
+      result        = el("#result"),          /* кнопка равно */
+		calculatorNum = el(".calculator__num"),
+		    /* кнопки чисел */
+		calculatorOps = el(".calculator__ops"),
+		    /* кнопки операторов */
+		resNum,
+		    /* Для сохранения результата */
+		oldNum = "",
+		    /* сюда кладем первый операнд */
+		currNum = "",
+		    /* сюда последующий операнд */
+		/* operator,                               /* какой оператор будем использовать */
+		proc = false; /* будем ли использовать проценты */
 
-      if (this.getAttribute("data-ops") !== 'proc') {
-         oldNum = currNum;
-         currNum = "";
-         displayUpper.innerHTML += oldNum;
-         operator = this.getAttribute("data-ops");
-      } else {
-         proc = true;
-         displayUpper.innerHTML += currNum;
-      }
+		/* если: клик по числу */
+		var setNum = function setNum() {
+				if (resNum) {
+						/* number если на дисплее отражен результат */
+						currNum = this.getAttribute("data-num"); /* заносим в переменную */
+						resNum = "";
+				} else {
+						/* если нет, добавляем число в  предыдущий операнд */
+						currNum += this.getAttribute("data-num");
+				}
+				display.innerHTML = currNum; /* Отобразить второй операнд */
+		};
 
-      console.log("First= " + oldNum + "; opper= " + operator + "; Second= " + currNum + "; proc= " + proc);
+		/* если: клик был по оператору. записываем число в oldNum и сохраняем значение оператора */
+		var moveNum = function moveNum() {
 
-      /*	alert(operator); */
+				if (this.getAttribute("data-ops") !== 'proc') {
 
-      var opChar;
-      switch (operator) {
-         case "plus":
-            opChar = getOperandChar.plus;break;
+						if (oldNum == "") {
+								oldNum = currNum;
+								currNum = "";
+								displayUpper.innerHTML = oldNum;
+								self.operator = this.getAttribute("data-ops");
+						} else {
+								currNum = currNum;
+						}
+				} else {
+						proc = true;
+						displayUpper.innerHTML = currNum;
+				}
 
-         case "minus":
-            opChar = getOperandChar.minus;break;
+				/*	alert(operator); */
 
-         case "times":
-            opChar = getOperandChar.times;break;
+				self.getOperand(self.operator);
 
-         case "divide":
-            opChar = getOperandChar.divide;break;
+				if (!proc) {
+						displayUpper.innerHTML = oldNum + opChar; /* заносим операнд в дисплей */
+				} else {
+						displayUpper.innerHTML = oldNum + opChar + currNum + getOperandChar.proc;
+				};
 
-         case "sqrt":
-            opChar = getOperandChar.sqrt;break;
+				result.setAttribute("data-result", ""); /* сбрасываем аттрибут на = */
+		};
 
-         case "pow2":
-            opChar = getOperandChar.pow2;break;
+		/*	console.log("First= " + oldNum + "; opper= " + operator + "; Second= " + currNum + "; proc= " + proc); */
 
-         case "powten":
-            opChar = getOperandChar.powten;break;
+		/* если: клик был по =. вычисляем результат */
+		var displayNum = function displayNum() {
+				displayUpper.innerHTML += currNum;
 
-         case "pow3":
-            opChar = getOperandChar.pow3;break;
+				/* выполняем преобразование в числа с плавающей точкой */
+				oldNum = parseFloat(oldNum);
+				currNum = parseFloat(currNum);
 
-         case "root3":
-            opChar = getOperandChar.root3;break;
+				/* выполняем операцию */
 
-         case "powY":
-            opChar = getOperandChar.powY;break;
+				var self = this;
+				self.getCalculate = function (operator) {
 
-         case "factorial":
-            opChar = getOperandChar.fact;break;
+						switch (operator) {
 
-         case "tan":
-            opChar = getOperandChar.tan;break;
+								case "plus":
+										resNum = utils.sum(oldNum, currNum, proc);break;
+								case "minus":
+										resNum = utils.minus(oldNum, currNum, proc);break;
+								case "times":
+										resNum = utils.times(oldNum, currNum, proc);break;
+								case "divide":
+										resNum = utils.divide(oldNum, currNum, proc);break;
+								case "sqrt":
+										resNum = utils.sqrt(oldNum);break;
+								case "pow2":
+										resNum = utils.pow2(oldNum);break;
 
-         case "cos":
-            opChar = getOperandChar.cos;break;
+								/* если = был нажат без оператора, сохраняем число и гоним дальше */
+								default:
+										resNum = currNum;
+						};
+						return resNum;
+				};
 
-         case "sin":
-            opChar = getOperandChar.sin;break;
+				self.getCalculate(self.operator);
 
-         case "log":
-            opChar = getOperandChar.log;break;
+				/* если результат вычислений вернул NaN или бесконечность */
+				if (!isFinite(resNum)) {
+						if (isNaN(resNum)) {
+								/* если результат NaN */
+								resNum = "Wrong result";
+						} else {
+								/* если в результате деления на ноль результат бесконечность */
+								resNum = "Divide by ZERO!!!!";
+								el('#calculator').classList.add("broken"); /* ломаем калькулятор */
+						}
+				}
 
-         case "ln":
-            opChar = getOperandChar.ln;break;
+				/* если результат получен и он не NaN и не бесконечность показываем результат */
+				display.innerHTML = resNum;
+				displayUpper.innerHTML = "&nbsp";
+				result.setAttribute("data-result", resNum);
 
-         //	console.log("First= " + oldNum + "; opper= " + operator + "; Second= " + currNum + "; proc= " + proc)
+				/* и обнуление переменных */
+				oldNum = "";
+				proc = false;
+				currNum = resNum;
+		};
 
-         default:
-            opChar = '&nbsp';
-      }
+		/* клик по кнопке С. обнуляем все. */
+		var clearAll = function clearAll() {
+				oldNum = "";
+				currNum = "";
+				display.innerHTML = "0";
+				displayUpper.innerHTML = "&nbsp";
+				result.setAttribute("data-result", resNum);
+				proc = false;
+		};
 
-      if (!proc) {
-         displayUpper.innerHTML += opChar; /* заносим операнд в дисплей */
-      } else {
-         displayUpper.innerHTML += getOperandChar.proc;
-      };
+		this.run = function () {
+				/* на запуске отслеживаем эвенты */
 
-      result.setAttribute("data-result", ""); /* сбрасываем аттрибут на = */
-   };
+				/* эвент на клик числа */
+				for (var i = 0, l = calculatorNum.length; i < l; i++) {
+						calculatorNum[i].onclick = setNum;
+				}
 
-   /* если: клик был по =. вычисляем результат */
-   var displayNum = function displayNum() {
-      displayUpper.innerHTML += currNum;
+				/* эвент на клик оператора */
+				for (var i = 0, l = calculatorOps.length; i < l; i++) {
+						calculatorOps[i].onclick = moveNum;
+				}
 
-      /* выполняем преобразование в числа с плавающей точкой */
-      oldNum = parseFloat(oldNum);
-      currNum = parseFloat(currNum);
+				/* эвент на клик равно */
+				result.onclick = displayNum;
 
-      /* выполняем операцию */
-
-      switch (operator) {
-
-         case "plus":
-            resNum = utils.sum(oldNum, currNum, proc);break;
-
-         case "minus":
-            resNum = utils.minus(oldNum, currNum, proc);break;
-
-         case "times":
-            resNum = utils.times(oldNum, currNum, proc);break;
-
-         case "divide":
-            resNum = utils.divide(oldNum, currNum, proc);break;
-
-         case "sqrt":
-            resNum = utils.sqrt(oldNum);break;
-
-         case "pow2":
-            resNum = utils.pow2(oldNum);break;
-
-         case "powten":
-            resNum = utils.powten(oldNum);break;
-
-         case "pow3":
-            resNum = utils.pow3(oldNum);break;
-
-         case "root3":
-            resNum = utils.root3(oldNum);break;
-
-         case "powY":
-            resNum = utils.powY(oldNum, currNum);break;
-
-         case "factorial":
-            resNum = utils.factorial(oldNum);break;
-
-         case "tan":
-            resNum = utils.tan(oldNum);break;
-
-         case "cos":
-            resNum = utils.cos(oldNum);break;
-
-         case "sin":
-            resNum = utils.sin(oldNum);break;
-
-         case "log":
-            resNum = utils.log(oldNum);break;
-
-         case "ln":
-            resNum = utils.ln(oldNum);break;
-
-         /* если = был нажат без оператора, сохраняем число и гоним дальше */
-         default:
-            resNum = currNum;
-      }
-
-      /* если результат вычислений вернул NaN или бесконечность */
-      if (!isFinite(resNum)) {
-         if (isNaN(resNum)) {
-            /* если результат NaN */
-            resNum = "Wrong result";
-         } else {
-            /* если в результате деления на ноль результат бесконечность */
-            resNum = "Divide by ZERO!!!!";
-            el('#calculator').classList.add("broken"); /* ломаем калькулятор */
-         }
-      }
-
-      /* если результат получен и он не NaN и не бесконечность показываем результат */
-      display.innerHTML = resNum;
-      displayUpper.innerHTML = "&nbsp";
-      result.setAttribute("data-result", resNum);
-
-      /* и обнуление переменных */
-      oldNum = 0;
-      proc = false;
-      currNum = resNum;
-   };
-
-   /* клик по кнопке С. обнуляем все. */
-   var clearAll = function clearAll() {
-      oldNum = "";
-      currNum = "";
-      display.innerHTML = "0";
-      displayUpper.innerHTML = "&nbsp";
-      result.setAttribute("data-result", resNum);
-      proc = false;
-   };
-
-   this.run = function () {
-      /* на запуске отслеживаем эвенты */
-
-      /* эвент на клик числа */
-      for (var i = 0, l = calculatorNum.length; i < l; i++) {
-         calculatorNum[i].onclick = setNum;
-      }
-
-      /* эвент на клик оператора */
-      for (var i = 0, l = calculatorOps.length; i < l; i++) {
-         calculatorOps[i].onclick = moveNum;
-      }
-
-      /* эвент на клик равно */
-      result.onclick = displayNum;
-
-      /* клик на С */
-      el("#clear").onclick = clearAll;
-   };
+				/* клик на С */
+				el("#clear").onclick = clearAll;
+		};
 };
 
 function IngCalculator() {
-   Calculator.call(this);
+		Calculator.call(this);
+
+		var self = this;
+		var parentGetOperand = self.getOperand;
+
+		self.getOperand = function () {
+				parentGetOperand();
+				switch (operator) {
+						case "plus":
+								opChar = getOperandChar.plus;break;
+						case "minus":
+								opChar = getOperandChar.minus;break;
+						case "times":
+								opChar = getOperandChar.times;break;
+						case "divide":
+								opChar = getOperandChar.divide;break;
+						case "sqrt":
+								opChar = getOperandChar.sqrt;break;
+						case "pow2":
+								opChar = getOperandChar.pow2;break;
+
+						case "powten":
+								opChar = getOperandChar.powten;break;
+						case "pow3":
+								opChar = getOperandChar.pow3;break;
+						case "root3":
+								opChar = getOperandChar.root3;break;
+						case "powY":
+								opChar = getOperandChar.powY;break;
+						case "factorial":
+								opChar = getOperandChar.fact;break;
+						case "tan":
+								opChar = getOperandChar.tan;break;
+						case "cos":
+								opChar = getOperandChar.cos;break;
+						case "sin":
+								opChar = getOperandChar.sin;break;
+						case "log":
+								opChar = getOperandChar.log;break;
+						case "ln":
+								opChar = getOperandChar.ln;break;
+
+						default:
+								opChar = '&nbsp';
+				}
+				return opChar;
+		};
+
+		self.getOperand(self.operator);
+
+		var displayNum = function displayNum() {
+				var self = this;
+				self.getCalculate = function (operator) {
+						switch (operator) {
+
+								case "plus":
+										resNum = utils.sum(oldNum, currNum, proc);break;
+								case "minus":
+										resNum = utils.minus(oldNum, currNum, proc);break;
+								case "times":
+										resNum = utils.times(oldNum, currNum, proc);break;
+								case "divide":
+										resNum = utils.divide(oldNum, currNum, proc);break;
+								case "sqrt":
+										resNum = utils.sqrt(oldNum);break;
+								case "pow2":
+										resNum = utils.pow2(oldNum);break;
+
+								case "powten":
+										resNum = utils.powten(oldNum);break;
+								case "pow3":
+										resNum = utils.pow3(oldNum);break;
+								case "root3":
+										resNum = utils.root3(oldNum);break;
+								case "powY":
+										resNum = utils.powY(oldNum, currNum);break;
+								case "factorial":
+										resNum = utils.factorial(oldNum);break;
+								case "tan":
+										resNum = utils.tan(oldNum);break;
+								case "cos":
+										resNum = utils.cos(oldNum);break;
+								case "sin":
+										resNum = utils.sin(oldNum);break;
+								case "log":
+										resNum = utils.log(oldNum);break;
+								case "ln":
+										resNum = utils.ln(oldNum);break;
+
+								/* если = был нажат без оператора, сохраняем число и гоним дальше */
+								default:
+										resNum = currNum;
+						};
+						return resNum;
+				};
+		};
 };
 
 //var calculator = new Calculator();

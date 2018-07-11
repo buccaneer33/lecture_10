@@ -7,21 +7,23 @@ function Calculator() {
 
 	var opChar;
 	var self = this;
-	self.operator = "";
+	/*self.operator = "";*/
+	self.opChar = opChar;
+
 	self.getOperand = function(operator){
 		switch (operator) {
-			case "plus": opChar = getOperandChar.plus; break;
-			case "minus":	opChar = getOperandChar.minus; break;
-			case "times": opChar = getOperandChar.times; break;
+			case "plus":   opChar = getOperandChar.plus; break;
+			case "minus":	 opChar = getOperandChar.minus; break;
+			case "times":  opChar = getOperandChar.times; break;
 			case "divide": opChar = getOperandChar.divide; break;
-			case "sqrt": opChar = getOperandChar.sqrt; break;
-			case "pow2": opChar = getOperandChar.pow2; break;
+			case "sqrt":   opChar = getOperandChar.sqrt; break;
+			case "pow2":   opChar = getOperandChar.pow2; break;
 
 			default:
 				opChar = '&nbsp';
 		}
 		return opChar;
-	};
+	}.bind(this);
 
   /* ярлыки для быстрого разначения */
   var el = function(element) {
@@ -40,7 +42,7 @@ function Calculator() {
 	    resNum,                                 /* Для сохранения результата */
 	    oldNum = "",                            /* сюда кладем первый операнд */
       currNum = "",                           /* сюда последующий операнд */
-      /* operator,                               /* какой оператор будем использовать */
+      operator,                               /* какой оператор будем использовать */
 			proc					= false;		   						/* будем ли использовать проценты */
 
   /* если: клик по числу */
@@ -64,6 +66,7 @@ function Calculator() {
 						currNum = "";
 						displayUpper.innerHTML = oldNum ;
 						self.operator = this.getAttribute("data-ops");
+						operator =	self.operator;
 					} else {
 						currNum = currNum;
 					}
@@ -78,7 +81,8 @@ function Calculator() {
 	/*	alert(operator); */
 
 
-		self.getOperand(self.operator);
+		self.getOperand(operator);
+		opChar = self.opChar;
 
 			if(!proc){
 				displayUpper.innerHTML = oldNum + opChar;      /* заносим операнд в дисплей */
@@ -121,7 +125,7 @@ displayUpper.innerHTML +=  currNum;
 			return resNum;
 		};
 
-		self.getCalculate(self.operator);
+		self.getCalculate(operator);
 
 
     /* если результат вычислений вернул NaN или бесконечность */
@@ -181,10 +185,15 @@ function IngCalculator(){
 	Calculator.call(this);
 
 			var self = this;
+			var operator =	self.operator;
+			var opChar = self.opChar;
 			var parentGetOperand = self.getOperand;
+			/*      переменная operator не переходит из основного кода.      */
 
 			self.getOperand = function(){
-				parentGetOperand();
+				parentGetOperand.call(self);
+				console.log("oper " + operator);
+				//self.run();
 				switch (operator) {
 					case "plus": opChar = getOperandChar.plus; break;
 					case "minus":	opChar = getOperandChar.minus; break;
@@ -209,11 +218,12 @@ function IngCalculator(){
 						opChar = '&nbsp';
 				}
 				return opChar;
+				console.log(opChar);
 			};
 
-			self.getOperand(self.operator);
+		//	self.getOperand(self.operator);
 
-
+/*
   var displayNum = function() {
 		var self = this;
 		self.getCalculate = function(operator){
@@ -238,14 +248,14 @@ function IngCalculator(){
 				case "ln": resNum = utils.ln(oldNum); break;
 
 					/* если = был нажат без оператора, сохраняем число и гоним дальше */
-				default:
+			/*	default:
 					resNum = currNum;
 			};
 			return resNum;
 
 		};
 
-	}
+	} */
 
 
 

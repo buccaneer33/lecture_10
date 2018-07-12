@@ -1,8 +1,11 @@
 "use strict";
+
 var Calculator = {
-	Simple: function () {
+	Simple: function (container) {
+
 		var opChar;
 		var self = this;
+		self.container;
 		self.opChar;
 		self.resNum;
 		self.oldnum;
@@ -20,31 +23,25 @@ var Calculator = {
 				case "divide": opChar = getOperandChar.divide; break;
 				case "sqrt":   opChar = getOperandChar.sqrt; break;
 				case "pow2":   opChar = getOperandChar.pow2; break;
-
-				default:
-					opChar = '&nbsp';
+				default:    	 opChar = '&nbsp';
 			}
 			return opChar;
-			self.opChar = opChar;
-
 		}.bind(this);
 
 		self.getCalculate = function(calcOper, oldNum, currNum, proc){
 
 			switch (calcOper) {
 
-				case "plus": resNum = utils.sum(oldNum, currNum, proc); break;
-				case "minus": resNum = utils.minus(oldNum, currNum, proc); break;
-				case "times": resNum = utils.times(oldNum, currNum, proc); break;
+				case "plus":   resNum = utils.sum(oldNum, currNum, proc); break;
+				case "minus":  resNum = utils.minus(oldNum, currNum, proc); break;
+				case "times":  resNum = utils.times(oldNum, currNum, proc); break;
 				case "divide": resNum = utils.divide(oldNum, currNum, proc); break;
-				case "sqrt": resNum = utils.sqrt(oldNum); break;
-				case "pow2": resNum = utils.pow2(oldNum); break;
+				case "sqrt":   resNum = utils.sqrt(oldNum); break;
+				case "pow2":   resNum = utils.pow2(oldNum); break;
 					/* если = был нажат без оператора, сохраняем число и гоним дальше */
-				default:
-					resNum = currNum;
+				default:  		 resNum = currNum;
 			};
 			return resNum;
-			self.resNum = resNum;
 		}.bind(this);
 
 	  /* ярлыки для быстрого разначения */
@@ -54,10 +51,13 @@ var Calculator = {
 	    }
 	    return document.querySelectorAll(element); /* в противном случае возвращаем лист */
 	  };
+		 /* Создаем переменные */
 
-	  /* Создаем переменные */
-	  var display       = el("#display"),         /* дисплей калькулятора */
-				displayUpper  = el('#displayUpper'),     /* верхний дисплей */
+	  var calcBlock 		= getElementById(container); /* находим контейнер в котором будем запускать */
+				display       = calcBlock.getElementsByClassName("calculator__display"), /* дисплей калькулятора */
+				displayUpper  = calcBlock.getElementsByClassName("calculator__display-upper"), /* верхний дисплей */
+		    result        = calcBlock.getElementsByClassName("calculator__result"), /* кнопка равно */
+
 	      result        = el("#result"),          /* кнопка равно */
 	      calculatorNum = el(".calculator__num"), /* кнопки чисел */
 	      calculatorOps = el(".calculator__ops"), /* кнопки операторов */
@@ -77,10 +77,8 @@ var Calculator = {
 	    }
 	    display.innerHTML = currNum; /* Отобразить второй операнд */
 	  };
-
 	  /* если: клик был по оператору. записываем число в oldNum и сохраняем значение оператора */
 	  var moveNum = function() {
-
 				if (this.getAttribute("data-ops")!=='proc'){
 
 						if (oldNum == ""){
@@ -98,32 +96,28 @@ var Calculator = {
 					displayUpper.innerHTML = currNum;
 				}
 
-		/*	alert(operator); */
+		/* console.log("First= " + oldNum + "; opper= " + calcOperator + "; Second= " + currNum + "; proc= " + proc);*/
 
-			self.getOperand(calcOperator);
+			self.opChar = self.getOperand(calcOperator);
 
-				if(!proc){
+			if(!proc){
 					displayUpper.innerHTML = oldNum + self.opChar;      /* заносим операнд в дисплей */
 				} else {
 					displayUpper.innerHTML = oldNum + self.opChar + currNum +  getOperandChar.proc;
 				};
-
 	    result.setAttribute("data-result", ""); /* сбрасываем аттрибут на = */
 	  };
 
-		/*	console.log("First= " + oldNum + "; opper= " + operator + "; Second= " + currNum + "; proc= " + proc); */
-
 	  /* если: клик был по =. вычисляем результат */
-	  var displayNum = function() {
-	displayUpper.innerHTML +=  currNum;
+		var displayNum = function() {
+			displayUpper.innerHTML +=  currNum;
 
 	    /* выполняем преобразование в числа с плавающей точкой */
 	    oldNum = parseFloat(oldNum);
 	    currNum = parseFloat(currNum);
 
 	    /* выполняем операцию */
-
-			self.getCalculate(calcOperator, oldNum, currNum, proc);
+			self.resNum = self.getCalculate(calcOperator, oldNum, currNum, proc);
 			resNum = self.resNum;
 
 	    /* если результат вычислений вернул NaN или бесконечность */
@@ -157,7 +151,7 @@ var Calculator = {
 			proc = false;
 	  };
 
-		this.run = function(){
+
 			/* на запуске отслеживаем эвенты */
 
 			/* эвент на клик числа */
@@ -175,11 +169,17 @@ var Calculator = {
 
 			/* клик на С */
 			el("#clear").onclick = clearAll;
-		};
+
 
 	},
-	Ingenering: function (){
-	 document.getElementById('ingeneer').classList.remove("display--none");
+
+	Ingenering: function (container){
+		var getAddKeys = require('./additionalKeys');
+		var getIngAddKeys = document.createElement('div');
+		getIngAddKeys.classList.add("ingeneer");
+		getIngAddKeys.innerHTML = getAddKeys.ingenering;
+		var additionalKeysBlock = document.getElementsByClassName("additionalKeysBlock")[0];
+		additionalKeysBlock.appendChild(getIngAddKeys);
 
 		Calculator.Simple.call(this);
 
@@ -187,10 +187,11 @@ var Calculator = {
 				var  ingUtils = require('./utils');
 				var  getIngOperandChar = require('./getOperand');
 
+
 				var parentGetOperand = self.getOperand;
 				self.getOperand = function(operIng){
 					parentGetOperand();
-					this.run();
+					//this.run();
 					var IngOpChar;
 					switch (operIng) {
 						case "plus":  IngOpChar = getIngOperandChar.plus;  break;		case "minus":	IngOpChar = getIngOperandChar.minus; break;
@@ -205,13 +206,12 @@ var Calculator = {
 						default:
 							IngOpChar = '&nbsp';
 					}
-					self.opChar = IngOpChar;
 					return IngOpChar;
 				};
 			var parentgetCalculate = self.getCalculate;
 			self.getCalculate = function(operIng, oldNum, currNum, proc){
 				parentgetCalculate();
-				this.run();
+				//this.run();
 				var IngResNum;
 				switch (operIng) {
 					case "plus": IngResNum = ingUtils.sum(oldNum, currNum, proc); break;
@@ -235,14 +235,31 @@ var Calculator = {
 					default:
 						IngResNum = currNum;
 				};
-				self.resNum = IngResNum;
 				return IngResNum;
 
 			};
 	}
-}
-/* var calculator = new Calculator();
-calculator.run();
+};
 
-var IngCalculator = new IngCalculator();
-IngCalculator.run(); */
+function CalcFactory(container){
+	this.container = container;
+
+};
+
+CalcFactory.prototype = {
+    constructor: CalcFactory,
+
+    makeSimple: function (container) {
+         return new Calculator.Simple(container);
+    },
+
+    makeIngenering: function (container) {
+         return new Calculator.Ingenering(container);
+    }
+};
+
+
+var factory = new CalcFactory(container);
+
+factory.makeSimple(calculator);
+//factory.makeIngenering();

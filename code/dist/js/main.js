@@ -115,11 +115,12 @@ module.exports = getAdditionalKeys;
 
 
 var Calculator = {
-	Simple: function Simple(container) {
+	Simple: function Simple(containerId) {
 
 		var opChar;
 		var self = this;
-		self.container;
+		this.container = containerId;
+		//var cont = this.container;
 		self.opChar;
 		self.resNum;
 		self.oldnum;
@@ -182,18 +183,30 @@ var Calculator = {
 		};
 		/* Создаем переменные */
 
-		var calcBlock = getElementById(container); /* находим контейнер в котором будем запускать */
-		display = calcBlock.getElementsByClassName("calculator__display"), /* дисплей калькулятора */
-		displayUpper = calcBlock.getElementsByClassName("calculator__display-upper"), /* верхний дисплей */
-		result = calcBlock.getElementsByClassName("calculator__result"), /* кнопка равно */
+		console.log("containerID = " + self.container);
 
-		result = el("#result"), /* кнопка равно */
-		calculatorNum = el(".calculator__num"), /* кнопки чисел */
-		calculatorOps = el(".calculator__ops"), /* кнопки операторов */
-		resNum, /* Для сохранения результата */
-		oldNum = "", /* сюда кладем первый операнд */
-		currNum = "", /* сюда последующий операнд */
-		calcOperator, /* какой оператор будем использовать */
+		var calcBlock = document.getElementById(self.container),
+		    /* находим контейнер в котором будем запускать */
+		display = calcBlock.getElementsByClassName('calculator__display')[0],
+		    /* дисплей калькулятора */
+		displayUpper = calcBlock.getElementsByClassName('calculator__display-upper')[0],
+		    /* верхний дисплей */
+		result = calcBlock.getElementsByClassName("calculator__result")[0],
+		    /* кнопка равно */
+		clear = calcBlock.getElementsByClassName("calculator__clear")[0],
+		    /* кнопка C */
+		calculatorNum = calcBlock.getElementsByClassName("calculator__num"),
+		    /* кнопки чисел */
+		calculatorOps = calcBlock.getElementsByClassName("calculator__ops"),
+		    /* кнопки операторов */
+		resNum,
+		    /* Для сохранения результата */
+		oldNum = "",
+		    /* сюда кладем первый операнд */
+		currNum = "",
+		    /* сюда последующий операнд */
+		calcOperator,
+		    /* какой оператор будем использовать */
 		proc = false; /* будем ли использовать проценты */
 
 		/* если: клик по числу */
@@ -258,7 +271,7 @@ var Calculator = {
 				} else {
 					/* если в результате деления на ноль результат бесконечность */
 					resNum = "Divide by ZERO!!!!";
-					el('#calculator').classList.add("broken"); /* ломаем калькулятор */
+					calcBlock.classList.add("broken"); /* ломаем калькулятор */
 				}
 			}
 
@@ -299,10 +312,18 @@ var Calculator = {
 		result.onclick = displayNum;
 
 		/* клик на С */
-		el("#clear").onclick = clearAll;
+		clear.onclick = clearAll;
 	},
 
-	Ingenering: function Ingenering(container) {
+	Ingenering: function Ingenering(containerId) {
+		this.container = containerId;
+
+		//	var container = containerIng;
+		//	var containerIngId = ("'" + container + "'");
+
+		console.log("containerIng = " + containerId);
+		//console.log("containerIngId = " + containerIngId);
+
 		var getAddKeys = __webpack_require__(/*! ./additionalKeys */ "./src/js/additionalKeys.js");
 		var getIngAddKeys = document.createElement('div');
 		getIngAddKeys.classList.add("ingeneer");
@@ -310,16 +331,16 @@ var Calculator = {
 		var additionalKeysBlock = document.getElementsByClassName("additionalKeysBlock")[0];
 		additionalKeysBlock.appendChild(getIngAddKeys);
 
-		Calculator.Simple.call(this);
-
 		var self = this;
+		Calculator.Simple.call(this, containerId);
+
 		var ingUtils = __webpack_require__(/*! ./utils */ "./src/js/utils.js");
 		var getIngOperandChar = __webpack_require__(/*! ./getOperand */ "./src/js/getOperand.js");
 
 		var parentGetOperand = self.getOperand;
 		self.getOperand = function (operIng) {
 			parentGetOperand();
-			//this.run();
+			//	this.run();
 			var IngOpChar;
 			switch (operIng) {
 				case "plus":
@@ -400,26 +421,25 @@ var Calculator = {
 	}
 };
 
-function CalcFactory(container) {
-	this.container = container;
+function CalcFactory() {
+	//this.container = container;
+
 };
 
 CalcFactory.prototype = {
-	constructor: CalcFactory,
 
 	makeSimple: function makeSimple(container) {
 		return new Calculator.Simple(container);
 	},
-
 	makeIngenering: function makeIngenering(container) {
 		return new Calculator.Ingenering(container);
-	}
+	},
+	constructor: CalcFactory
 };
+var factory = new CalcFactory();
 
-var factory = new CalcFactory(container);
-
-factory.makeSimple(calculator);
-//factory.makeIngenering();
+factory.makeIngenering('calculator1');
+factory.makeSimple('calculator2');
 
 /***/ }),
 

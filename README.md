@@ -1,11 +1,15 @@
 # Lecture 10
 
-[![N|Solid](https://www.lukaszbacik.pl/images/upload/css-flexbox-beuv45gte56.jpg)](https://nodesource.com/products/nsolid)
-[![N|Solid](https://media.kulturbanause.de/2014/06/sass-logo.png)](https://nodesource.com/products/nsolid)
-[![N|Solid](https://specific-group.com/wp-content/uploads/node-logo.png)](https://nodesource.com/products/nsolid)
-[![N|Solid](https://lh3.googleusercontent.com/IJT0hs063T4nT3qhAmMtmEHoiIuX8r6whGJjL6Y4kijszWJ0EaM3hl7hCtX9OFl3X6I=w140)](https://nodesource.com/products/nsolid)
+[![N|Solid](https://www.lukaszbacik.pl/images/upload/css-flexbox-beuv45gte56.jpg)](https://nodesource.com/products/nsolid)[![N|Solid](https://media.kulturbanause.de/2014/06/sass-logo.png)](https://nodesource.com/products/nsolid)[![N|Solid](https://specific-group.com/wp-content/uploads/node-logo.png)](https://nodesource.com/products/nsolid)[![N|Solid](https://lh3.googleusercontent.com/IJT0hs063T4nT3qhAmMtmEHoiIuX8r6whGJjL6Y4kijszWJ0EaM3hl7hCtX9OFl3X6I=w140)](https://nodesource.com/products/nsolid)
 
-Lectiure 10 is a responsive-enabled, mobile-ready, calculator powered by Javascript.
+Lectiure 10 is a responsive-enabled, mobile-ready, double calculator powered by Javascript.
+
+In the calculator architecture we used the following behavioral patterns:
+- Simple Factory: 267-281 line. We use to create 2 units of calculators.
+- Facade: 280-281 line. To start the calculator you need only 1 line. All the rest is hidden. 
+
+
+ECMAScript 6 was used in this calculator. We used the declaration of variables LET and CONST, and arrow functions.
 
 Lectiure 10 uses a number of open source projects to work properly:
 

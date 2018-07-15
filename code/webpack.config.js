@@ -10,12 +10,12 @@ var clientConfig = (function webpackConfig() {
   var config = Object.assign({});
   config.mode = 'development',
   config.entry = ['./src/js/index.js','./src/scss/index.scss',];
-  config.output = {path: path.resolve(__dirname, 'dist'), filename: 'js/main.js'};
+  config.output = {path: path.resolve(__dirname, 'dist/dev'), filename: 'js/main.js'};
 	config.devtool = 'source-map';
   config.module = {
     rules: [
 			{test: /\.js$/,
-				exclude: /node_modules/,
+				exclude: /(node_modules|bower_components)/,
 				use: {loader: 'babel-loader',
 				options: {presets: ['babel-preset-env']}}
 			},
@@ -28,14 +28,14 @@ var clientConfig = (function webpackConfig() {
 						{loader: 'sass-loader', options: {sourceMap: true}}
 					],	publicPath:'./css/'
 				})
-			}/*,
+			},
 			{test: /\.(png|jpg|gif|svg)$/,
 				use: [
 					{loader: 'file-loader',
 					options: {name: './img/[name].[ext]',
 					context: path.resolve(__dirname, "./img")}
 					}]
-			},
+			}/*,
 			{test: /\.(ttf|eot|woff|woff2)$/,
 				use:
 					{loader: "file-loader",
@@ -60,8 +60,9 @@ var clientConfig = (function webpackConfig() {
 	    },
 	    title: constants.HTML_TITLE,
 	    author: constants.HTML_AUTHOR,
+			mode: constants.WEBPACK_MODE_DEV,
 	    //minify: {collapseWhitespace: true},
-	    filename: '../dist/index.html',
+	    filename: 'index.html',
 	    template: './src/html/template/index.html'
         }),
 	  new FaviconsWebpack({

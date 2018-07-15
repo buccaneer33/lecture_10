@@ -6,7 +6,7 @@ var Calculator = {
 		var opChar;
 		var self = this;
 		this.container = containerId;
-		//var cont = this.container;
+		self.calcBlock;
 		self.opChar;
 		self.resNum;
 		self.oldnum;
@@ -46,24 +46,19 @@ var Calculator = {
 			return resNum;
 		}.bind(this);
 
-	  /* ярлыки для быстрого разначения */
-	  var el = function(element) {
-	    if (element.charAt(0) === "#") { /* Если выпала решетка */
-	    return document.querySelector(element); /* возвращаем единичный элемент */
-	    }
-	    return document.querySelectorAll(element); /* в противном случае возвращаем лист */
-	  };
+
 		 /* Создаем переменные */
 
 		 console.log("containerID = " + self.container);
 
-	  var calcBlock 		= document.getElementById(self.container), /* находим контейнер в котором будем запускать */
-				display       = calcBlock.getElementsByClassName('calculator__display')[0], /* дисплей калькулятора */
-				displayUpper  = calcBlock.getElementsByClassName('calculator__display-upper')[0], /* верхний дисплей */
-		    result        = calcBlock.getElementsByClassName("calculator__result")[0], /* кнопка равно */
-				clear         = calcBlock.getElementsByClassName("calculator__clear")[0], /* кнопка C */
-	      calculatorNum = calcBlock.getElementsByClassName("calculator__num"), /* кнопки чисел */
-	      calculatorOps = calcBlock.getElementsByClassName("calculator__ops"), /* кнопки операторов */
+	   self.calcBlock 	= document.getElementById(self.container); /* находим контейнер в котором будем запускать */
+
+		var	display       = self.calcBlock.getElementsByClassName('calculator__display')[0], /* дисплей калькулятора */
+				displayUpper  = self.calcBlock.getElementsByClassName('calculator__display-upper')[0], /* верхний дисплей */
+		    result        = self.calcBlock.getElementsByClassName("calculator__result")[0], /* кнопка равно */
+				clear         = self.calcBlock.getElementsByClassName("calculator__clear")[0], /* кнопка C */
+	      calculatorNum = self.calcBlock.getElementsByClassName("calculator__num"), /* кнопки чисел */
+	      calculatorOps = self.calcBlock.getElementsByClassName("calculator__ops"), /* кнопки операторов */
 		    resNum,                                 /* Для сохранения результата */
 		    oldNum = "",                            /* сюда кладем первый операнд */
 	      currNum = "",                           /* сюда последующий операнд */
@@ -71,7 +66,7 @@ var Calculator = {
 				proc					= false;		   						/* будем ли использовать проценты */
 
 	  /* если: клик по числу */
-	  var setNum = function() {
+	  var setNum = function(){
 	    if (resNum) { /* number если на дисплее отражен результат */
 	    currNum = this.getAttribute("data-num"); /* заносим в переменную */
 	    resNum = "";
@@ -81,7 +76,7 @@ var Calculator = {
 	    display.innerHTML = currNum; /* Отобразить второй операнд */
 	  };
 	  /* если: клик был по оператору. записываем число в oldNum и сохраняем значение оператора */
-	  var moveNum = function() {
+	  var moveNum = function(){
 				if (this.getAttribute("data-ops")!=='proc'){
 
 						if (oldNum == ""){
@@ -112,7 +107,7 @@ var Calculator = {
 	  };
 
 	  /* если: клик был по =. вычисляем результат */
-		var displayNum = function() {
+		var displayNum = () => {
 			displayUpper.innerHTML +=  currNum;
 
 	    /* выполняем преобразование в числа с плавающей точкой */
@@ -145,7 +140,7 @@ var Calculator = {
 	  };
 
 	  /* клик по кнопке С. обнуляем все. */
-	  var clearAll = function() {
+	  var clearAll = () => {
 	    oldNum = "";
 	    currNum = "";
 	    display.innerHTML = "0";
@@ -158,12 +153,13 @@ var Calculator = {
 			/* на запуске отслеживаем эвенты */
 
 			/* эвент на клик числа */
-			for (var i = 0, l = calculatorNum.length; i < l; i++) {
+			for (let i = 0, l = calculatorNum.length; i < l; i++) {
 				calculatorNum[i].onclick = setNum;
 			}
 
 			/* эвент на клик оператора */
-			for (var i = 0, l = calculatorOps.length; i < l; i++) {
+			for (let i = 0, l = calculatorOps.length; i < l; i++) {
+				/*console.log('operand'); */
 				calculatorOps[i].onclick = moveNum;
 			}
 
@@ -178,34 +174,32 @@ var Calculator = {
 
 	Ingenering: function (containerId){
 		this.container = containerId;
-
-	//	var container = containerIng;
-	//	var containerIngId = ("'" + container + "'");
-
 		console.log("containerIng = " + containerId);
-		//console.log("containerIngId = " + containerIngId);
-
-		var getAddKeys = require('./additionalKeys');
-		var getIngAddKeys = document.createElement('div');
-		getIngAddKeys.classList.add("ingeneer");
-		getIngAddKeys.innerHTML = getAddKeys.ingenering;
-		var additionalKeysBlock = document.getElementsByClassName("additionalKeysBlock")[0];
-		additionalKeysBlock.appendChild(getIngAddKeys);
+		var self = this;
 
 
+			var getIngPanels = ()=>{
+					let getAddKeys = require('./additionalKeys');
+					let getIngAddKeys = document.createElement('div');
+					getIngAddKeys.classList.add("ingeneer");
+					getIngAddKeys.innerHTML = getAddKeys.ingenering;
+					let giveMeBlock = document.getElementById(containerId);
+					let additionalKeysBlock = giveMeBlock.getElementsByClassName("additionalKeysBlock")[0];
+					additionalKeysBlock.appendChild(getIngAddKeys);
+		};
+		getIngPanels();
+	Calculator.Simple.call(this, containerId);
 
-				var self = this;
-				Calculator.Simple.call(this, containerId);
 
 				var  ingUtils = require('./utils');
 				var  getIngOperandChar = require('./getOperand');
 
-
 				var parentGetOperand = self.getOperand;
+
 				self.getOperand = function(operIng){
 					parentGetOperand();
-				//	this.run();
 					var IngOpChar;
+					console.log(operIng);
 					switch (operIng) {
 						case "plus":  		IngOpChar = getIngOperandChar.plus;  break;		case "minus":	IngOpChar = getIngOperandChar.minus; break;
 						case "times": 		IngOpChar = getIngOperandChar.times; break;		case "divide":IngOpChar = getIngOperandChar.divide; break;
@@ -220,11 +214,10 @@ var Calculator = {
 							IngOpChar = '&nbsp';
 					}
 					return IngOpChar;
-				};
+				}.bind(this);
 			var parentgetCalculate = self.getCalculate;
 			self.getCalculate = function(operIng, oldNum, currNum, proc){
 				parentgetCalculate();
-				//this.run();
 				var IngResNum;
 				switch (operIng) {
 					case "plus": IngResNum = ingUtils.sum(oldNum, currNum, proc); break;
@@ -249,7 +242,7 @@ var Calculator = {
 						IngResNum = currNum;
 				};
 				return IngResNum;
-			};
+			}.bind(this);
 	}
 };
 
@@ -271,5 +264,5 @@ CalcFactory.prototype = {
 };
 var factory = new CalcFactory();
 
-factory.makeIngenering('calculator1');
-factory.makeSimple('calculator2');
+factory.makeSimple('calculator1');
+factory.makeIngenering('calculator2');

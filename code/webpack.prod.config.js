@@ -3,14 +3,14 @@ const ExtractTextPlugin = require ('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 let 	FaviconsWebpack   = require('favicons-webpack-plugin');
 var 	sass              = require('sass');
+var 	postcss    				= require('postcss');
 const constants         = require("./constants");
-
 
 var clientConfig = (function webpackConfig() {
   var config = Object.assign({});
   config.mode = 'production',
   config.entry = ['./src/js/index.js','./src/scss/index.scss',];
-  config.output = {path: path.resolve(__dirname, 'dist'), filename: 'js/main.js'};
+  config.output = {path: path.resolve(__dirname, 'dist/prod'), filename: 'js/main.js'};
 	config.devtool = 'source-map';
   config.module = {
     rules: [
@@ -23,12 +23,16 @@ var clientConfig = (function webpackConfig() {
 				include: path.resolve(__dirname, 'src/scss'),
 				use: ExtractTextPlugin.extract({
 				fallback: "style-loader",
-					use:[
-						{loader: 'css-loader', options: {url: false,minimize: true,sourceMap: false}},
+					use: [
+						{loader: 'css-loader', options: {url: false,minimize: true,sourceMap: false}}, 
+						{loader: 'postcss-loader'}, 
 						{loader: 'sass-loader', options: {sourceMap: false}}
 					],	publicPath:'./css/'
 				})
 			},
+			{test: /\.css/,
+					loader: 'postcss-loader'
+					},
 			{test: /\.(png|jpg|gif|svg)$/,
 				use: [
 					{loader: 'file-loader',
@@ -60,8 +64,9 @@ var clientConfig = (function webpackConfig() {
 	    },
 	    title: constants.HTML_TITLE,
 	    author: constants.HTML_AUTHOR,
+			mode: constants.WEBPACK_MODE_PROD,
 	    minify: {collapseWhitespace: true},
-	    filename: '../dist/index.html',
+	    filename: 'index.html',
 	    template: './src/html/template/index.html'
         }),
 	  new FaviconsWebpack({

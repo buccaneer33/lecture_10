@@ -1,4 +1,6 @@
 "use strict";
+var cache = {};
+
  var sum = function (op1, op2, proc){
 	 if(proc){var res = op1 + ((op1/100)*op2);
 	 }else{var res = op1 + op2;}
@@ -31,7 +33,36 @@ var root3 = function (op1){ var res = Math.cbrt(op1); return res; };
 /**********/
 var powY = function (op1, op2){ var res = Math.pow(op1, op2); return res; };
 /**********/
-var factorial = function (op1){ var res = op1 ? op1 * factorial(op1 - 1) : 1; return res; };
+var factorial = function (op1){
+
+const Memoize = (fn) => {
+
+    return (...args) => {
+      let n = args[0];
+      if (n in cache) {
+        console.log('Fetching from cache', n);
+        return cache[n];
+      }
+      else {
+        console.log('Calculating result', n);
+        let result = fn(n);
+        cache[n] = result;
+        return result;
+      }
+    };
+  };
+  const GetFactorial = Memoize(
+    (x) => {
+      if (x === 0) {
+        return 1;
+      }else {
+        return x * factorial(x - 1);
+      }
+    }
+  );
+var res = GetFactorial(op1);
+return res;
+ };
 /**********/
 var tan = function (op1){ var res = Math.tan(op1); return res; };
 /**********/

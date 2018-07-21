@@ -1,21 +1,31 @@
 const path              = require('path');
 const ExtractTextPlugin = require ('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-let   FaviconsWebpack   = require('favicons-webpack-plugin');
-var   sass              = require('sass');
-const constants         = require("./constants");
+let 	FaviconsWebpack   = require('favicons-webpack-plugin');
+var 	sass              = require('sass');
+var 	postcss    				= require('postcss');
+const Constants         = require("./constants");
+const autoprefixer      = require('autoprefixer');
+const EVENT = process.env.npm_lifecycle_event || '';
+const PROD = EVENT.includes('prod');
+const DEV = EVENT.includes('dev');
+var pathToDist = PROD ? (pathToDist = 'dist/prod') : (pathToDist = 'dist/dev');
+var ConfMode = 	PROD ? (ConfMode = Constants.WEBPACK_MODE_PROD) : (ConfMode = Constants.WEBPACK_MODE_DEV);
 
+
+////////////////
 
 var clientConfig = (function webpackConfig() {
   var config = Object.assign({});
-  config.mode = 'development',
+
   config.entry = ['./src/js/index.js','./src/scss/index.scss',];
-  config.output = {path: path.resolve(__dirname, 'dist/dev'), filename: 'js/main.js'};
-	config.devtool = 'source-map';
+  config.output = {path: path.resolve(__dirname,  pathToDist), filename: 'js/main.js'};
+	PROD ? config.devtool = '' : config.devtool = 'source-map';
+	
   config.module = {
     rules: [
 			{test: /\.js$/,
-				exclude: /(node_modules|bower_components)/,
+				exclude: /node_modules/,
 				use: {loader: 'babel-loader',
 				options: {presets: ['babel-preset-env']}}
 			},
@@ -23,12 +33,14 @@ var clientConfig = (function webpackConfig() {
 				include: path.resolve(__dirname, 'src/scss'),
 				use: ExtractTextPlugin.extract({
 				fallback: "style-loader",
-					use:[
-						{loader: 'css-loader', options: {url: false,minimize: false,sourceMap: true}},
-						{loader: 'sass-loader', options: {sourceMap: true}}
+					use: [
+						PROD ? {loader: 'css-loader', options: {url: false,minimize: true,sourceMap: false}} : {loader: 'css-loader', options: {url: false,minimize: false,sourceMap: true}}  ,
+						PROD ? {loader: 'postcss-loader', options: {plugins: [autoprefixer({browsers:['ie >= 8', 'last 12 version']})],sourceMap: false}} : {loader: 'postcss-loader', options: {sourceMap: true}}  ,
+						PROD ? {loader: 'sass-loader', options: {sourceMap: false}} : {loader: 'sass-loader', options: {sourceMap: true}}
 					],	publicPath:'./css/'
 				})
 			},
+			
 			{test: /\.(png|jpg|gif|svg)$/,
 				use: [
 					{loader: 'file-loader',
@@ -53,29 +65,30 @@ var clientConfig = (function webpackConfig() {
 	  }),
 	  new HtmlWebpackPlugin({
 	    files: {
-        "css": [ "index.css" ],
-				"js" : [ "js/main.js"],
-				"chunks": {	"head": {"entry": "", "css": [ "css/index.css" ]},
-										"main": {"entry": "js/main.js", "css": []}},
+          "css": [ "index.css" ],
+		  "js" : [ "js/main.js"],
+		  "chunks": {"head": {"entry": "",  "css": [ "css/index.css" ]},
+                 "main": {"entry": "js/main.js", "css": []}},
 	    },
-	    title: constants.HTML_TITLE,
-	    author: constants.HTML_AUTHOR,
-			mode: constants.WEBPACK_MODE_DEV,
-	    //minify: {collapseWhitespace: true},
+	    title: Constants.HTML_TITLE,
+	    author: Constants.HTML_AUTHOR,
+			mode: ConfMode,
+			
+	    minify: {collapseWhitespace: true},
 	    filename: 'index.html',
 	    template: './src/html/template/index.html'
         }),
 	  new FaviconsWebpack({
-      logo: './src/img/favicon/favicon.jpg',
-      prefix: 'img/favicon/',
-      emitStats: false,
-      statsFilename: 'iconstats-[hash].json',
-      persistentCache: true,
-      inject: true,
+        logo: './src/img/favicon/favicon.jpg',
+        prefix: 'img/favicon/',    
+        emitStats: false,
+        statsFilename: 'iconstats-[hash].json',
+        persistentCache: true,
+        inject: true,
 	    background: '#fff',
-      title: 'Webpack App',
-	    icons: {android: false,appleIcon: false,appleStartup: false,coast: false,favicons: true,
-                firefox: true, opengraph: false,twitter: false,yandex: false,windows: false}
+        title: 'Webpack App',
+	    icons: {android: true,appleIcon: false,appleStartup: false,coast: false,favicons: true,
+                firefox: true, opengraph: false,twitter: false,yandex: false,windows: true}
 	  })
 	]
 	/*config.plugins.push(

@@ -23,7 +23,7 @@ var Calculator = {
 				case "minus":	 opChar = getOperandChar.minus; break;
 				case "times":  opChar = getOperandChar.times; break;
 				case "divide": opChar = getOperandChar.divide; break;
-				case "sqrt":   opChar = getOperandChar.sqrt; break;
+				//case "opReverse":   opChar = getOperandChar.sqrt; break;
 				case "pow2":   opChar = getOperandChar.pow2; break;
 				default:    	 opChar = '&nbsp';
 			}
@@ -36,7 +36,7 @@ var Calculator = {
 				case "minus":  resNum = utils.minus(oldNum, currNum, proc); break;
 				case "times":  resNum = utils.times(oldNum, currNum, proc); break;
 				case "divide": resNum = utils.divide(oldNum, currNum, proc); break;
-				case "sqrt":   resNum = utils.sqrt(oldNum); break;
+			//	case "opReverse":   resNum = utils.opReverse(oldNum); break;
 				case "pow2":   resNum = utils.pow2(oldNum); break;
 					/* если = был нажат без оператора, сохраняем число и гоним дальше */
 				default:  		 resNum = currNum;
@@ -88,7 +88,10 @@ var Calculator = {
 	  };
 	  /* если: клик был по оператору. записываем число в oldNum и сохраняем значение оператора */
 	  var moveNum = function(){
-				if (this.getAttribute("data-ops")!=='proc'){
+
+
+				if (this.getAttribute("data-ops")!=='proc' && this.getAttribute("data-ops")!=='opReverse'){
+
 						if (oldNum == ""){
 							oldNum = currNum;
 							currNum = "";
@@ -103,8 +106,14 @@ var Calculator = {
 							self.UpperDisp.UcurrNum = currNum;
 							showResToUpperDisp();
 						}
-				}
-				else{
+
+
+				} else if(this.getAttribute("data-ops") =='opReverse' && this.getAttribute("data-ops") !='proc'){
+					currNum = utils.opReverse(currNum);
+					self.UpperDisp.UcurrNum =currNum;
+					console.log(currNum);
+
+				}else if (this.getAttribute("data-ops") =='proc'){
 					proc = true;
 					self.UpperDisp.UcurrNum = currNum;
 				}
@@ -169,6 +178,13 @@ var Calculator = {
 	    display.innerHTML = "0";
 	    result.setAttribute("data-result", resNum);
 			proc = false;
+			self.UpperDisp = {
+				UoldNum: "",
+				UcurrNum: "",
+				UcalcOperator: "",
+				Uproc: "",
+				UresNum: ""
+			};
 			clearUpperDisp();
 		 	showResToUpperDisp();
 	  };
@@ -183,6 +199,8 @@ var Calculator = {
 			}
 			/* эвент на клик равно */
 			result.onclick = displayNum;
+
+			/**/
 
 			/* клик на С */
 			clear.onclick = clearAll;
@@ -219,10 +237,10 @@ var Calculator = {
 					switch (operIng) {
 						case "plus":  		IngOpChar = getIngOperandChar.plus;  break;		case "minus":	IngOpChar = getIngOperandChar.minus; break;
 						case "times": 		IngOpChar = getIngOperandChar.times; break;		case "divide":IngOpChar = getIngOperandChar.divide; break;
-						case "sqrt":  		IngOpChar = getIngOperandChar.sqrt; break;		case "pow2":  IngOpChar = getIngOperandChar.pow2; break;
+						case "opReverse": IngOpChar = getIngOperandChar.sqrt; break;		case "pow2":  IngOpChar = getIngOperandChar.pow2; break;
 						case "powten":    IngOpChar = getIngOperandChar.powten; break; 	case "pow3":  IngOpChar = getIngOperandChar.pow3; break;
 						case "root3":     IngOpChar = getIngOperandChar.root3;	break; 	case "powY":  IngOpChar = getIngOperandChar.powY; break;
-						case "factorial": IngOpChar = getIngOperandChar.fact; break; 		case "tan":   IngOpChar = getIngOperandChar.tan; break;
+						case "factorial": IngOpChar = getIngOperandChar.fact; break; 		case "sqrt":   IngOpChar = getIngOperandChar.sqrt; break;
 						case "cos":       IngOpChar = getIngOperandChar.cos; break; 		case "sin":   IngOpChar = getIngOperandChar.sin; break;
 						case "log":       IngOpChar = getIngOperandChar.log; break; 		case "ln":    IngOpChar = getIngOperandChar.ln; break;
 
@@ -238,10 +256,10 @@ var Calculator = {
 				switch (operIng) {
 					case "plus": IngResNum = ingUtils.sum(oldNum, currNum, proc); break; case "minus": IngResNum = ingUtils.minus(oldNum, currNum, proc); break;
 					case "times": IngResNum = ingUtils.times(oldNum, currNum, proc); break; case "divide": IngResNum = ingUtils.divide(oldNum, currNum, proc); break;
-					case "sqrt": IngResNum = ingUtils.sqrt(oldNum); break; 	case "pow2": IngResNum = ingUtils.pow2(oldNum); break;
+					case "opReverse":IngResNum = ingUtils.sqrt(oldNum); break; 	case "pow2": IngResNum = ingUtils.pow2(oldNum); break;
 					case "powten": IngResNum = ingUtils.powten(oldNum); break; case "pow3": IngResNum = ingUtils.pow3(oldNum); break;
 					case "root3": IngResNum = ingUtils.root3(oldNum);	break; 	case "powY": IngResNum = ingUtils.powY(oldNum, currNum); break;
-					case "factorial": IngResNum = ingUtils.factorial(oldNum); break; case "tan": IngResNum = ingUtils.tan(oldNum); break;
+					case "factorial": IngResNum = ingUtils.factorial(oldNum); break; case "sqrt": IngResNum = ingUtils.sqrt(oldNum); break;
 					case "cos": IngResNum = ingUtils.cos(oldNum); break; 	case "sin": IngResNum = ingUtils.sin(oldNum); break;
 					case "log": IngResNum = ingUtils.log(oldNum); break; case "ln": IngResNum = ingUtils.ln(oldNum); break;
 

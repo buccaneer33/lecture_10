@@ -1,4 +1,5 @@
 'use strict';
+var  clearHistory = require('../helpers/clearHistory');
 
 var closeHistBlock = function(container) {
 	let elem = document.getElementById(container).getElementsByClassName('calculator__display-hist')[0];
@@ -14,6 +15,7 @@ function switchCalcHistBlock(container) {
 	let elem = document.getElementById(container).getElementsByClassName('submenu__hist')[0];
 	this.close = function() {closeHistBlock(container);};
 	this.open = function() {openHistBlock(container);};
+	this.clear = function(){clearHistory(container)};
 	var self = this;
 	elem.onclick = function(e) {
 

@@ -65,6 +65,19 @@ return res;
  };
 /**********/
 var tan = function (op1){ var res = Math.tan(op1); return res; };
+/***********/
+var opReverse = function(op1){
+	console.log('reverse1');
+	var op = Math.sign(op1);
+switch (op) {
+	case 1: var res = parseFloat("-" + op1); return res; break;
+	case -1: var res = Math.abs(op1); return res; ;break;
+	case 0: var res = 0; return res; break;
+	case -0: var res = 0; return res; break;
+	default: return op1;
+
+}
+ }
 /**********/
 var cos = function (op1){ var res = Math.cos(op1); return res; };
 /**********/
@@ -76,4 +89,4 @@ var log = function (op1){ var res = Math.log10(op1); return res;	};
 /**********/
 
 
-	module.exports = {sum, minus, times, divide, sqrt, pow2, powten, pow3, root3,  powY, factorial, tan, cos, sin, log, ln};
+	module.exports = {sum, minus, times, divide, sqrt, pow2, powten, pow3, root3,  powY, factorial, tan, cos, sin, log, ln, opReverse};

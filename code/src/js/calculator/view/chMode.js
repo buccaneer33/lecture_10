@@ -16,7 +16,6 @@ var getEngMode = function(container){
 
 function changeMode(container) {
 	let elem = document.getElementById(container).getElementsByClassName('submenu__mode')[0];
-//console.log(elem);
 	this.eng = function() {getEngMode(container);};
 	this.simple = function() {getSimpleMode(container);};
 	var self = this;

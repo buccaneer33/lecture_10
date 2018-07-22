@@ -137,8 +137,7 @@ var Calculator = {
 					opChar = getOperandChar.times;break;
 				case "divide":
 					opChar = getOperandChar.divide;break;
-				case "sqrt":
-					opChar = getOperandChar.sqrt;break;
+				//case "opReverse":   opChar = getOperandChar.sqrt; break;
 				case "pow2":
 					opChar = getOperandChar.pow2;break;
 				default:
@@ -157,8 +156,7 @@ var Calculator = {
 					resNum = utils.times(oldNum, currNum, proc);break;
 				case "divide":
 					resNum = utils.divide(oldNum, currNum, proc);break;
-				case "sqrt":
-					resNum = utils.sqrt(oldNum);break;
+				//	case "opReverse":   resNum = utils.opReverse(oldNum); break;
 				case "pow2":
 					resNum = utils.pow2(oldNum);break;
 				/* если = был нажат без оператора, сохраняем число и гоним дальше */
@@ -222,7 +220,9 @@ var Calculator = {
 		};
 		/* если: клик был по оператору. записываем число в oldNum и сохраняем значение оператора */
 		var moveNum = function moveNum() {
-			if (this.getAttribute("data-ops") !== 'proc') {
+
+			if (this.getAttribute("data-ops") !== 'proc' && this.getAttribute("data-ops") !== 'opReverse') {
+
 				if (oldNum == "") {
 					oldNum = currNum;
 					currNum = "";
@@ -237,7 +237,11 @@ var Calculator = {
 					self.UpperDisp.UcurrNum = currNum;
 					showResToUpperDisp();
 				}
-			} else {
+			} else if (this.getAttribute("data-ops") == 'opReverse' && this.getAttribute("data-ops") != 'proc') {
+				currNum = utils.opReverse(currNum);
+				self.UpperDisp.UcurrNum = currNum;
+				console.log(currNum);
+			} else if (this.getAttribute("data-ops") == 'proc') {
 				proc = true;
 				self.UpperDisp.UcurrNum = currNum;
 			}
@@ -304,6 +308,13 @@ var Calculator = {
 			display.innerHTML = "0";
 			result.setAttribute("data-result", resNum);
 			proc = false;
+			self.UpperDisp = {
+				UoldNum: "",
+				UcurrNum: "",
+				UcalcOperator: "",
+				Uproc: "",
+				UresNum: ""
+			};
 			clearUpperDisp();
 			showResToUpperDisp();
 		};
@@ -318,6 +329,8 @@ var Calculator = {
 		}
 		/* эвент на клик равно */
 		result.onclick = displayNum;
+
+		/**/
 
 		/* клик на С */
 		clear.onclick = clearAll;
@@ -360,7 +373,7 @@ var Calculator = {
 				case "times":
 					IngOpChar = getIngOperandChar.times;break;case "divide":
 					IngOpChar = getIngOperandChar.divide;break;
-				case "sqrt":
+				case "opReverse":
 					IngOpChar = getIngOperandChar.sqrt;break;case "pow2":
 					IngOpChar = getIngOperandChar.pow2;break;
 				case "powten":
@@ -370,8 +383,8 @@ var Calculator = {
 					IngOpChar = getIngOperandChar.root3;break;case "powY":
 					IngOpChar = getIngOperandChar.powY;break;
 				case "factorial":
-					IngOpChar = getIngOperandChar.fact;break;case "tan":
-					IngOpChar = getIngOperandChar.tan;break;
+					IngOpChar = getIngOperandChar.fact;break;case "sqrt":
+					IngOpChar = getIngOperandChar.sqrt;break;
 				case "cos":
 					IngOpChar = getIngOperandChar.cos;break;case "sin":
 					IngOpChar = getIngOperandChar.sin;break;
@@ -395,7 +408,7 @@ var Calculator = {
 				case "times":
 					IngResNum = ingUtils.times(oldNum, currNum, proc);break;case "divide":
 					IngResNum = ingUtils.divide(oldNum, currNum, proc);break;
-				case "sqrt":
+				case "opReverse":
 					IngResNum = ingUtils.sqrt(oldNum);break;case "pow2":
 					IngResNum = ingUtils.pow2(oldNum);break;
 				case "powten":
@@ -405,8 +418,8 @@ var Calculator = {
 					IngResNum = ingUtils.root3(oldNum);break;case "powY":
 					IngResNum = ingUtils.powY(oldNum, currNum);break;
 				case "factorial":
-					IngResNum = ingUtils.factorial(oldNum);break;case "tan":
-					IngResNum = ingUtils.tan(oldNum);break;
+					IngResNum = ingUtils.factorial(oldNum);break;case "sqrt":
+					IngResNum = ingUtils.sqrt(oldNum);break;
 				case "cos":
 					IngResNum = ingUtils.cos(oldNum);break;case "sin":
 					IngResNum = ingUtils.sin(oldNum);break;
@@ -471,6 +484,10 @@ var _switchCalcHistBlock = __webpack_require__(/*! ./view/switchCalcHistBlock.js
 
 var _switchCalcHistBlock2 = _interopRequireDefault(_switchCalcHistBlock);
 
+var _showHistory = __webpack_require__(/*! ./helpers/showHistory.js */ "./src/js/calculator/helpers/showHistory.js");
+
+var _showHistory2 = _interopRequireDefault(_showHistory);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function CalcInit(container) {
@@ -479,6 +496,7 @@ function CalcInit(container) {
   new _chTheme2.default(container);
   new _chMode2.default(container);
   new _switchCalcHistBlock2.default(container);
+  new _showHistory2.default(container);
 };
 exports.default = CalcInit;
 
@@ -495,7 +513,7 @@ exports.default = CalcInit;
 
 
 var getAdditionalKeys = {
-	ingenering: '<button data-ops="ln" class="calculator__ops">ln</button><button data-ops="log" class="calculator__ops">log</button><button data-ops="sin" class="calculator__ops">sin</button><button data-ops="cos" class="calculator__ops">cos</button><button data-ops="tan" class="calculator__ops">tan</button><button data-ops="factorial" class="calculator__ops">n!</button><button data-ops="pow" class="calculator__ops">x&#696;</button><button data-ops="root3" class="calculator__ops">&#8731;x</button><button data-ops="pow3" class="calculator__ops">x&#179;</button><button data-ops="powten" class="calculator__ops">10&#739;</button>'
+	ingenering: '<button data-ops="ln" class="calculator__ops">ln</button><button data-ops="log" class="calculator__ops">log</button><button data-ops="sin" class="calculator__ops">sin</button><button data-ops="cos" class="calculator__ops">cos</button><button  data-ops="sqrt" class="calculator__ops">&radic;</button><button data-ops="factorial" class="calculator__ops">n!</button><button data-ops="pow" class="calculator__ops">x&#696;</button><button data-ops="root3" class="calculator__ops">&#8731;x</button><button data-ops="pow3" class="calculator__ops">x&#179;</button><button data-ops="powten" class="calculator__ops">10&#739;</button>'
 };
 
 module.exports = getAdditionalKeys;
@@ -513,14 +531,41 @@ module.exports = getAdditionalKeys;
 
 
 function calcHistory(UpperDisp, container) {
-	console.log('Функция подключена');
-	var history = document.getElementById(container).getElementsByClassName('history-list')[0];
-	var result = '' + UpperDisp.UoldNum + UpperDisp.UcalcOperator + UpperDisp.UcurrNum + UpperDisp.Uproc + '=' + UpperDisp.UresNum;
-	var getListLi = document.createElement('li');
-	getListLi.innerHTML = result;
-	history.appendChild(getListLi);
+  /*console.log('Функция истории подключена');*/
+  var history = document.getElementById(container).getElementsByClassName('history-list')[0];
+  var result = '' + UpperDisp.UoldNum + UpperDisp.UcalcOperator + UpperDisp.UcurrNum + UpperDisp.Uproc;
+  var getListLi = document.createElement('li');
+  getListLi.setAttribute('data-hist', 'histItem');
+  getListLi.setAttribute('hist-result', UpperDisp.UresNum);
+
+  getListLi.innerHTML = result;
+  history.appendChild(getListLi);
 };
 module.exports = calcHistory;
+
+/***/ }),
+
+/***/ "./src/js/calculator/helpers/clearHistory.js":
+/*!***************************************************!*\
+  !*** ./src/js/calculator/helpers/clearHistory.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function clearHistory(container) {
+	/*console.log('Функция удаления подключена');*/
+	var history = document.getElementById(container).getElementsByClassName('history-list')[0];
+	var elem = history.childNodes;
+	if (elem) {
+		while (history.firstChild) {
+			history.removeChild(history.firstChild);
+		}
+	}
+}
+module.exports = clearHistory;
 
 /***/ }),
 
@@ -556,6 +601,52 @@ var getOperandChar = {
 };
 
 module.exports = getOperandChar;
+
+/***/ }),
+
+/***/ "./src/js/calculator/helpers/showHistory.js":
+/*!**************************************************!*\
+  !*** ./src/js/calculator/helpers/showHistory.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var showHistoryItem = function showHistoryItem(container, result, inner) {
+	var upperDisp = document.getElementById(container).getElementsByClassName('calculator__display-upper')[0];
+	var disp = document.getElementById(container).getElementsByClassName('calculator__display')[0];
+	upperDisp.innerHTML = inner;
+	disp.innerHTML = result;
+};
+
+function showHistory(container) {
+
+	var elem = document.getElementById(container).getElementsByClassName('history-list')[0];
+	this.histItem = function () {
+		showHistoryItem(container, self.result, self.inner);
+	};
+	var result;
+	var inner;
+	var self = this;
+	elem.onclick = function (e) {
+		var target = e.target;
+		var action = target.getAttribute('data-hist');
+		result = target.getAttribute('hist-result');
+		inner = target.innerHTML;
+		self.result = result;
+		self.inner = inner;
+		if (action) {
+			self[action]();
+		}
+	};
+};
+
+exports.default = showHistory;
 
 /***/ }),
 
@@ -662,6 +753,24 @@ var factorial = function factorial(op1) {
 var tan = function tan(op1) {
   var res = Math.tan(op1);return res;
 };
+/***********/
+var opReverse = function opReverse(op1) {
+  console.log('reverse1');
+  var op = Math.sign(op1);
+  switch (op) {
+    case 1:
+      var res = parseFloat("-" + op1);return res;break;
+    case -1:
+      var res = Math.abs(op1);return res;;break;
+    case 0:
+      var res = 0;return res;break;
+    case -0:
+      var res = 0;return res;break;
+    default:
+      return op1;
+
+  }
+};
 /**********/
 var cos = function cos(op1) {
   var res = Math.cos(op1);return res;
@@ -680,7 +789,7 @@ var log = function log(op1) {
 };
 /**********/
 
-module.exports = { sum: sum, minus: minus, times: times, divide: divide, sqrt: sqrt, pow2: pow2, powten: powten, pow3: pow3, root3: root3, powY: powY, factorial: factorial, tan: tan, cos: cos, sin: sin, log: log, ln: ln };
+module.exports = { sum: sum, minus: minus, times: times, divide: divide, sqrt: sqrt, pow2: pow2, powten: powten, pow3: pow3, root3: root3, powY: powY, factorial: factorial, tan: tan, cos: cos, sin: sin, log: log, ln: ln, opReverse: opReverse };
 
 /***/ }),
 
@@ -721,7 +830,6 @@ var getEngMode = function getEngMode(container) {
 
 function changeMode(container) {
 	var elem = document.getElementById(container).getElementsByClassName('submenu__mode')[0];
-	//console.log(elem);
 	this.eng = function () {
 		getEngMode(container);
 	};
@@ -799,6 +907,8 @@ exports.default = changeTheme;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+var clearHistory = __webpack_require__(/*! ../helpers/clearHistory */ "./src/js/calculator/helpers/clearHistory.js");
+
 var closeHistBlock = function closeHistBlock(container) {
 	var elem = document.getElementById(container).getElementsByClassName('calculator__display-hist')[0];
 	elem.style.height = 0 + "px";
@@ -815,6 +925,9 @@ function switchCalcHistBlock(container) {
 	};
 	this.open = function () {
 		openHistBlock(container);
+	};
+	this.clear = function () {
+		clearHistory(container);
 	};
 	var self = this;
 	elem.onclick = function (e) {

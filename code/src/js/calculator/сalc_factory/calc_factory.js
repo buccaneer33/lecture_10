@@ -14,8 +14,8 @@ var Calculator = {
 		self.proc;
 
 		var  utils = require('../helpers/utils');
-		var  calcHistory = require('../helpers/calcHistory');
-		var  getOperandChar = require('../helpers/getOperand');
+		var  calcHistory = require('../helpers/calc_history');
+		var  getOperandChar = require('../helpers/get_operand');
 
 		self.getOperand = function(calcOp){
 			switch (calcOp) {
@@ -63,15 +63,15 @@ var Calculator = {
 
 	   self.calcBlock 	= document.getElementById(self.container); /* находим контейнер в котором будем запускать */
 		var	display       = self.calcBlock.getElementsByClassName('calculator__display')[0], /* дисплей калькулятора */
-				displayUpper  = self.calcBlock.getElementsByClassName('calculator__display-upper')[0], /* верхний дисплей */
+						displayUpper  = self.calcBlock.getElementsByClassName('calculator__display-upper')[0], /* верхний дисплей */
 		    result        = self.calcBlock.getElementsByClassName("calculator__result")[0], /* кнопка равно */
-				clear         = self.calcBlock.getElementsByClassName("calculator__clear")[0], /* кнопка C */
-	      calculatorNum = self.calcBlock.getElementsByClassName("calculator__num"), /* кнопки чисел */
-	      calculatorOps = self.calcBlock.getElementsByClassName("calculator__ops"), /* кнопки операторов */
+						clear         = self.calcBlock.getElementsByClassName("calculator__clear")[0], /* кнопка C */
+	     calculatorNum = self.calcBlock.getElementsByClassName("calculator__num"), /* кнопки чисел */
+	     calculatorOps = self.calcBlock.getElementsByClassName("calculator__ops"), /* кнопки операторов */
 		    resNum,                                 /* Для сохранения результата */
 		    oldNum = "",                            /* сюда кладем первый операнд */
-	      currNum = "",                           /* сюда последующий операнд */
-	      calcOperator,                               /* какой оператор будем использовать */
+	     currNum = "",                           /* сюда последующий операнд */
+	     calcOperator,                               /* какой оператор будем использовать */
 				proc					= false;		   						/* будем ли использовать проценты */
 
 	  /* если: клик по числу */
@@ -211,12 +211,11 @@ var Calculator = {
 		var self = this;
 
 			var getIngPanels = ()=>{
-					let getAddKeys = require('../helpers/additionalKeys');
+					let getAddKeys = require('../helpers/additional_keys');
 					let getIngAddKeys = document.createElement('div');
 					getIngAddKeys.classList.add("ingeneer");
 					getIngAddKeys.innerHTML = getAddKeys.ingenering;
-					let giveMeBlock = document.getElementById(containerId);
-					let additionalKeysBlock = giveMeBlock.getElementsByClassName("additionalKeysBlock")[0];
+					let additionalKeysBlock = document.getElementById(containerId).getElementsByClassName("calculator__additional-keys-block")[0];
 					let elem = additionalKeysBlock.querySelector('div');
 					if (elem){additionalKeysBlock.removeChild(elem);}
 					additionalKeysBlock.appendChild(getIngAddKeys);
@@ -226,7 +225,7 @@ var Calculator = {
 	Calculator.Simple.call(this, containerId);
 
 				var  ingUtils = require('../helpers/utils');
-				var  getIngOperandChar = require('../helpers/getOperand');
+				var  getIngOperandChar = require('../helpers/get_operand');
 
 				var parentGetOperand = self.getOperand;
 

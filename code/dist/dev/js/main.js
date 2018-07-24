@@ -97,363 +97,6 @@ module.exports = __webpack_require__.p + "./img/Calculator.png";
 
 /***/ }),
 
-/***/ "./src/js/calculator/CalcFactory/calcFactory.js":
-/*!******************************************************!*\
-  !*** ./src/js/calculator/CalcFactory/calcFactory.js ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-var Calculator = {
-	Simple: function Simple(containerId) {
-
-		var opChar;
-		var self = this;
-		this.container = containerId;
-		self.calcBlock;
-		self.opChar;
-		self.resNum;
-		self.oldnum;
-		self.currNum;
-		self.proc;
-
-		var utils = __webpack_require__(/*! ../helpers/utils */ "./src/js/calculator/helpers/utils.js");
-		var calcHistory = __webpack_require__(/*! ../helpers/calcHistory */ "./src/js/calculator/helpers/calcHistory.js");
-		var getOperandChar = __webpack_require__(/*! ../helpers/getOperand */ "./src/js/calculator/helpers/getOperand.js");
-
-		self.getOperand = function (calcOp) {
-			switch (calcOp) {
-				case "plus":
-					opChar = getOperandChar.plus;break;
-				case "minus":
-					opChar = getOperandChar.minus;break;
-				case "times":
-					opChar = getOperandChar.times;break;
-				case "divide":
-					opChar = getOperandChar.divide;break;
-				//case "opReverse":   opChar = getOperandChar.sqrt; break;
-				case "pow2":
-					opChar = getOperandChar.pow2;break;
-				default:
-					opChar = '&nbsp';
-			}
-			return opChar;
-		}.bind(this);
-
-		self.getCalculate = function (calcOper, oldNum, currNum, proc) {
-			switch (calcOper) {
-				case "plus":
-					resNum = utils.sum(oldNum, currNum, proc);break;
-				case "minus":
-					resNum = utils.minus(oldNum, currNum, proc);break;
-				case "times":
-					resNum = utils.times(oldNum, currNum, proc);break;
-				case "divide":
-					resNum = utils.divide(oldNum, currNum, proc);break;
-				//	case "opReverse":   resNum = utils.opReverse(oldNum); break;
-				case "pow2":
-					resNum = utils.pow2(oldNum);break;
-				/* если = был нажат без оператора, сохраняем число и гоним дальше */
-				default:
-					resNum = currNum;
-			};
-			return resNum;
-		}.bind(this);
-
-		var showResToUpperDisp = function showResToUpperDisp() {
-			displayUpper.innerHTML = '' + self.UpperDisp.UoldNum + self.UpperDisp.UcalcOperator + self.UpperDisp.UcurrNum + self.UpperDisp.Uproc;
-		};
-		var clearUpperDisp = function clearUpperDisp() {
-			self.UpperDisp = { UoldNum: "", UcurrNum: "", UcalcOperator: "", Uproc: "", UresNum: "" };
-		};
-
-		/* Создаем переменные */
-		self.UpperDisp = {
-			UoldNum: "",
-			UcurrNum: "",
-			UcalcOperator: "",
-			Uproc: "",
-			UresNum: ""
-		};
-
-		self.calcBlock = document.getElementById(self.container); /* находим контейнер в котором будем запускать */
-		var display = self.calcBlock.getElementsByClassName('calculator__display')[0],
-		    /* дисплей калькулятора */
-		displayUpper = self.calcBlock.getElementsByClassName('calculator__display-upper')[0],
-		    /* верхний дисплей */
-		result = self.calcBlock.getElementsByClassName("calculator__result")[0],
-		    /* кнопка равно */
-		clear = self.calcBlock.getElementsByClassName("calculator__clear")[0],
-		    /* кнопка C */
-		calculatorNum = self.calcBlock.getElementsByClassName("calculator__num"),
-		    /* кнопки чисел */
-		calculatorOps = self.calcBlock.getElementsByClassName("calculator__ops"),
-		    /* кнопки операторов */
-		resNum,
-		    /* Для сохранения результата */
-		oldNum = "",
-		    /* сюда кладем первый операнд */
-		currNum = "",
-		    /* сюда последующий операнд */
-		calcOperator,
-		    /* какой оператор будем использовать */
-		proc = false; /* будем ли использовать проценты */
-
-		/* если: клик по числу */
-		var setNum = function setNum() {
-			if (resNum) {
-				/* number если на дисплее отражен результат */
-				currNum = this.getAttribute("data-num"); /* заносим в переменную */
-				resNum = "";
-			} else {
-				/* если нет, добавляем число в  предыдущий операнд */
-				currNum += this.getAttribute("data-num");
-			}
-			display.innerHTML = currNum; /* Отобразить второй операнд */
-			self.UpperDisp.UcurrNum = currNum;
-		};
-		/* если: клик был по оператору. записываем число в oldNum и сохраняем значение оператора */
-		var moveNum = function moveNum() {
-
-			if (this.getAttribute("data-ops") !== 'proc' && this.getAttribute("data-ops") !== 'opReverse') {
-
-				if (oldNum == "") {
-					oldNum = currNum;
-					currNum = "";
-					self.UpperDisp.UoldNum = oldNum;
-					self.UpperDisp.UcurrNum = "";
-					self.operator = this.getAttribute("data-ops");
-					calcOperator = self.operator;
-					self.UpperDisp.UcalcOperator = self.operator;
-					showResToUpperDisp();
-				} else {
-					currNum = currNum;
-					self.UpperDisp.UcurrNum = currNum;
-					showResToUpperDisp();
-				}
-			} else if (this.getAttribute("data-ops") == 'opReverse' && this.getAttribute("data-ops") != 'proc') {
-				currNum = utils.opReverse(currNum);
-				self.UpperDisp.UcurrNum = currNum;
-				console.log(currNum);
-			} else if (this.getAttribute("data-ops") == 'proc') {
-				proc = true;
-				self.UpperDisp.UcurrNum = currNum;
-			}
-
-			/* console.log("First= " + oldNum + "; opper= " + calcOperator + "; Second= " + currNum + "; proc= " + proc);*/
-
-			self.opChar = self.getOperand(calcOperator);
-
-			if (!proc) {
-				self.UpperDisp.UcalcOperator = self.opChar;
-				showResToUpperDisp();
-			} else {
-				self.UpperDisp.UoldNum = oldNum;
-				self.UpperDisp.UcalcOperator = self.opChar;
-				self.UpperDisp.UcurrNum = currNum;
-				self.UpperDisp.Uproc = getOperandChar.proc;
-				showResToUpperDisp();
-			};
-			result.setAttribute("data-result", ""); /* сбрасываем аттрибут на = */
-		};
-
-		/* если: клик был по =. вычисляем результат */
-		var displayNum = function displayNum() {
-			self.UpperDisp.UcurrNum = currNum;
-
-			/* выполняем преобразование в числа с плавающей точкой */
-			oldNum = parseFloat(oldNum);
-			currNum = parseFloat(currNum);
-
-			/* выполняем операцию */
-			self.resNum = self.getCalculate(calcOperator, oldNum, currNum, proc);
-			resNum = self.resNum;
-			self.UpperDisp.UresNum = self.resNum;
-			showResToUpperDisp();
-
-			/* если результат вычислений вернул NaN или бесконечность */
-			if (!isFinite(resNum)) {
-				if (isNaN(resNum)) {
-					/* если результат NaN */
-					resNum = "Wrong result";
-				} else {
-					/* если в результате деления на ноль результат бесконечность */
-					resNum = "Divide by ZERO!!!!";
-					calcBlock.classList.add("broken"); /* ломаем калькулятор */
-				}
-			}
-			/* если результат получен и он не NaN и не бесконечность показываем результат */
-			display.innerHTML = resNum;
-			self.UpperDisp.UresNum = self.resNum;
-			console.log('' + self.UpperDisp.UoldNum + self.UpperDisp.UcalcOperator + self.UpperDisp.UcurrNum + self.UpperDisp.Uproc + '=' + self.UpperDisp.UresNum);
-			calcHistory(self.UpperDisp, containerId);
-			result.setAttribute("data-result", resNum);
-			/* и обнуление переменных */
-			oldNum = "";
-			proc = false;
-			currNum = resNum;
-			showResToUpperDisp();
-			clearUpperDisp();
-		};
-		/* клик по кнопке С. обнуляем все. */
-		var clearAll = function clearAll() {
-			oldNum = "";
-			currNum = "";
-			display.innerHTML = "0";
-			result.setAttribute("data-result", resNum);
-			proc = false;
-			self.UpperDisp = {
-				UoldNum: "",
-				UcurrNum: "",
-				UcalcOperator: "",
-				Uproc: "",
-				UresNum: ""
-			};
-			clearUpperDisp();
-			showResToUpperDisp();
-		};
-
-		/* эвент на клик числа */
-		for (var i = 0, l = calculatorNum.length; i < l; i++) {
-			calculatorNum[i].onclick = setNum;
-		}
-		/* эвент на клик оператора */
-		for (var _i = 0, _l = calculatorOps.length; _i < _l; _i++) {
-			calculatorOps[_i].onclick = moveNum;
-		}
-		/* эвент на клик равно */
-		result.onclick = displayNum;
-
-		/**/
-
-		/* клик на С */
-		clear.onclick = clearAll;
-	},
-
-	Ingenering: function Ingenering(containerId) {
-		this.container = containerId;
-		var self = this;
-
-		var getIngPanels = function getIngPanels() {
-			var getAddKeys = __webpack_require__(/*! ../helpers/additionalKeys */ "./src/js/calculator/helpers/additionalKeys.js");
-			var getIngAddKeys = document.createElement('div');
-			getIngAddKeys.classList.add("ingeneer");
-			getIngAddKeys.innerHTML = getAddKeys.ingenering;
-			var giveMeBlock = document.getElementById(containerId);
-			var additionalKeysBlock = giveMeBlock.getElementsByClassName("additionalKeysBlock")[0];
-			var elem = additionalKeysBlock.querySelector('div');
-			if (elem) {
-				additionalKeysBlock.removeChild(elem);
-			}
-			additionalKeysBlock.appendChild(getIngAddKeys);
-		};
-
-		getIngPanels();
-		Calculator.Simple.call(this, containerId);
-
-		var ingUtils = __webpack_require__(/*! ../helpers/utils */ "./src/js/calculator/helpers/utils.js");
-		var getIngOperandChar = __webpack_require__(/*! ../helpers/getOperand */ "./src/js/calculator/helpers/getOperand.js");
-
-		var parentGetOperand = self.getOperand;
-
-		self.getOperand = function (operIng) {
-			parentGetOperand();
-			var IngOpChar;
-
-			switch (operIng) {
-				case "plus":
-					IngOpChar = getIngOperandChar.plus;break;case "minus":
-					IngOpChar = getIngOperandChar.minus;break;
-				case "times":
-					IngOpChar = getIngOperandChar.times;break;case "divide":
-					IngOpChar = getIngOperandChar.divide;break;
-				case "opReverse":
-					IngOpChar = getIngOperandChar.sqrt;break;case "pow2":
-					IngOpChar = getIngOperandChar.pow2;break;
-				case "powten":
-					IngOpChar = getIngOperandChar.powten;break;case "pow3":
-					IngOpChar = getIngOperandChar.pow3;break;
-				case "root3":
-					IngOpChar = getIngOperandChar.root3;break;case "powY":
-					IngOpChar = getIngOperandChar.powY;break;
-				case "factorial":
-					IngOpChar = getIngOperandChar.fact;break;case "sqrt":
-					IngOpChar = getIngOperandChar.sqrt;break;
-				case "cos":
-					IngOpChar = getIngOperandChar.cos;break;case "sin":
-					IngOpChar = getIngOperandChar.sin;break;
-				case "log":
-					IngOpChar = getIngOperandChar.log;break;case "ln":
-					IngOpChar = getIngOperandChar.ln;break;
-
-				default:
-					IngOpChar = '&nbsp';
-			}
-			return IngOpChar;
-		}.bind(this);
-		var parentgetCalculate = self.getCalculate;
-		self.getCalculate = function (operIng, oldNum, currNum, proc) {
-			parentgetCalculate();
-			var IngResNum;
-			switch (operIng) {
-				case "plus":
-					IngResNum = ingUtils.sum(oldNum, currNum, proc);break;case "minus":
-					IngResNum = ingUtils.minus(oldNum, currNum, proc);break;
-				case "times":
-					IngResNum = ingUtils.times(oldNum, currNum, proc);break;case "divide":
-					IngResNum = ingUtils.divide(oldNum, currNum, proc);break;
-				case "opReverse":
-					IngResNum = ingUtils.sqrt(oldNum);break;case "pow2":
-					IngResNum = ingUtils.pow2(oldNum);break;
-				case "powten":
-					IngResNum = ingUtils.powten(oldNum);break;case "pow3":
-					IngResNum = ingUtils.pow3(oldNum);break;
-				case "root3":
-					IngResNum = ingUtils.root3(oldNum);break;case "powY":
-					IngResNum = ingUtils.powY(oldNum, currNum);break;
-				case "factorial":
-					IngResNum = ingUtils.factorial(oldNum);break;case "sqrt":
-					IngResNum = ingUtils.sqrt(oldNum);break;
-				case "cos":
-					IngResNum = ingUtils.cos(oldNum);break;case "sin":
-					IngResNum = ingUtils.sin(oldNum);break;
-				case "log":
-					IngResNum = ingUtils.log(oldNum);break;case "ln":
-					IngResNum = ingUtils.ln(oldNum);break;
-
-				/* если = был нажат без оператора, сохраняем число и гоним дальше */
-				default:
-					IngResNum = currNum;
-			};
-			return IngResNum;
-		}.bind(this);
-	}
-};
-
-function CalcFactory() {};
-
-CalcFactory.prototype = {
-
-	makeSimple: function makeSimple(container) {
-		return new Calculator.Simple(container);
-	},
-	makeIngenering: function makeIngenering(container) {
-		return new Calculator.Ingenering(container);
-	},
-	constructor: CalcFactory
-};
-var CalcFactory = new CalcFactory();
-
-exports.default = CalcFactory;
-
-/***/ }),
-
 /***/ "./src/js/calculator/calculator.js":
 /*!*****************************************!*\
   !*** ./src/js/calculator/calculator.js ***!
@@ -463,49 +106,50 @@ exports.default = CalcFactory;
 
 "use strict";
 
+/*import CalcFactory  from './calc_factory/calc_factory.js';*/
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _calcFactory = __webpack_require__(/*! ./CalcFactory/calcFactory.js */ "./src/js/calculator/CalcFactory/calcFactory.js");
+var _calc_class = __webpack_require__(/*! ./сalc_factory/calc_class.js */ "./src/js/calculator/сalc_factory/calc_class.js");
 
-var _calcFactory2 = _interopRequireDefault(_calcFactory);
+var _calc_class2 = _interopRequireDefault(_calc_class);
 
-var _chTheme = __webpack_require__(/*! ./view/chTheme.js */ "./src/js/calculator/view/chTheme.js");
+var _ch_theme = __webpack_require__(/*! ./view/ch_theme.js */ "./src/js/calculator/view/ch_theme.js");
 
-var _chTheme2 = _interopRequireDefault(_chTheme);
+var _ch_theme2 = _interopRequireDefault(_ch_theme);
 
-var _chMode = __webpack_require__(/*! ./view/chMode.js */ "./src/js/calculator/view/chMode.js");
+var _ch_mode = __webpack_require__(/*! ./view/ch_mode.js */ "./src/js/calculator/view/ch_mode.js");
 
-var _chMode2 = _interopRequireDefault(_chMode);
+var _ch_mode2 = _interopRequireDefault(_ch_mode);
 
-var _switchCalcHistBlock = __webpack_require__(/*! ./view/switchCalcHistBlock.js */ "./src/js/calculator/view/switchCalcHistBlock.js");
+var _switch_calc_history = __webpack_require__(/*! ./view/switch_calc_history.js */ "./src/js/calculator/view/switch_calc_history.js");
 
-var _switchCalcHistBlock2 = _interopRequireDefault(_switchCalcHistBlock);
+var _switch_calc_history2 = _interopRequireDefault(_switch_calc_history);
 
-var _showHistory = __webpack_require__(/*! ./helpers/showHistory.js */ "./src/js/calculator/helpers/showHistory.js");
+var _show_history = __webpack_require__(/*! ./helpers/show_history.js */ "./src/js/calculator/helpers/show_history.js");
 
-var _showHistory2 = _interopRequireDefault(_showHistory);
+var _show_history2 = _interopRequireDefault(_show_history);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function CalcInit(container) {
 
-  _calcFactory2.default.makeSimple(container);
-  new _chTheme2.default(container);
-  new _chMode2.default(container);
-  new _switchCalcHistBlock2.default(container);
-  new _showHistory2.default(container);
+  _calc_class2.default.makeIngenering(container);
+  new _ch_theme2.default(container);
+  new _ch_mode2.default(container);
+  new _switch_calc_history2.default(container);
+  new _show_history2.default(container);
 };
 exports.default = CalcInit;
 
 /***/ }),
 
-/***/ "./src/js/calculator/helpers/additionalKeys.js":
-/*!*****************************************************!*\
-  !*** ./src/js/calculator/helpers/additionalKeys.js ***!
-  \*****************************************************/
+/***/ "./src/js/calculator/helpers/additional_keys.js":
+/*!******************************************************!*\
+  !*** ./src/js/calculator/helpers/additional_keys.js ***!
+  \******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -513,17 +157,17 @@ exports.default = CalcInit;
 
 
 var getAdditionalKeys = {
-	ingenering: '<button data-ops="ln" class="calculator__ops">ln</button><button data-ops="log" class="calculator__ops">log</button><button data-ops="sin" class="calculator__ops">sin</button><button data-ops="cos" class="calculator__ops">cos</button><button  data-ops="sqrt" class="calculator__ops">&radic;</button><button data-ops="factorial" class="calculator__ops">n!</button><button data-ops="pow" class="calculator__ops">x&#696;</button><button data-ops="root3" class="calculator__ops">&#8731;x</button><button data-ops="pow3" class="calculator__ops">x&#179;</button><button data-ops="powten" class="calculator__ops">10&#739;</button>'
+	ingenering: '<button data-ops="ln" class="calculator__ops">ln</button><button data-ops="log" class="calculator__ops">log</button><button data-ops="sin" class="calculator__ops">sin</button><button data-ops="cos" class="calculator__ops">cos</button><button  data-ops="sqrt" class="calculator__ops">&radic;</button><button data-ops="factorial" class="calculator__ops">n!</button><button data-ops="powY" class="calculator__ops">x&#696;</button><button data-ops="root3" class="calculator__ops">&#8731;x</button><button data-ops="pow3" class="calculator__ops">x&#179;</button><button data-ops="powten" class="calculator__ops">10&#739;</button>'
 };
 
 module.exports = getAdditionalKeys;
 
 /***/ }),
 
-/***/ "./src/js/calculator/helpers/calcHistory.js":
-/*!**************************************************!*\
-  !*** ./src/js/calculator/helpers/calcHistory.js ***!
-  \**************************************************/
+/***/ "./src/js/calculator/helpers/calc_history.js":
+/*!***************************************************!*\
+  !*** ./src/js/calculator/helpers/calc_history.js ***!
+  \***************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -545,10 +189,10 @@ module.exports = calcHistory;
 
 /***/ }),
 
-/***/ "./src/js/calculator/helpers/clearHistory.js":
-/*!***************************************************!*\
-  !*** ./src/js/calculator/helpers/clearHistory.js ***!
-  \***************************************************/
+/***/ "./src/js/calculator/helpers/clear_history.js":
+/*!****************************************************!*\
+  !*** ./src/js/calculator/helpers/clear_history.js ***!
+  \****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -569,10 +213,10 @@ module.exports = clearHistory;
 
 /***/ }),
 
-/***/ "./src/js/calculator/helpers/getOperand.js":
-/*!*************************************************!*\
-  !*** ./src/js/calculator/helpers/getOperand.js ***!
-  \*************************************************/
+/***/ "./src/js/calculator/helpers/get_operand.js":
+/*!**************************************************!*\
+  !*** ./src/js/calculator/helpers/get_operand.js ***!
+  \**************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -604,10 +248,10 @@ module.exports = getOperandChar;
 
 /***/ }),
 
-/***/ "./src/js/calculator/helpers/showHistory.js":
-/*!**************************************************!*\
-  !*** ./src/js/calculator/helpers/showHistory.js ***!
-  \**************************************************/
+/***/ "./src/js/calculator/helpers/show_history.js":
+/*!***************************************************!*\
+  !*** ./src/js/calculator/helpers/show_history.js ***!
+  \***************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -793,10 +437,10 @@ module.exports = { sum: sum, minus: minus, times: times, divide: divide, sqrt: s
 
 /***/ }),
 
-/***/ "./src/js/calculator/view/chMode.js":
-/*!******************************************!*\
-  !*** ./src/js/calculator/view/chMode.js ***!
-  \******************************************/
+/***/ "./src/js/calculator/view/ch_mode.js":
+/*!*******************************************!*\
+  !*** ./src/js/calculator/view/ch_mode.js ***!
+  \*******************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -807,25 +451,40 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _calcFactory = __webpack_require__(/*! ../CalcFactory/calcFactory.js */ "./src/js/calculator/CalcFactory/calcFactory.js");
+var _calc_class = __webpack_require__(/*! ../сalc_factory/calc_class.js */ "./src/js/calculator/сalc_factory/calc_class.js");
 
-var _calcFactory2 = _interopRequireDefault(_calcFactory);
+var _calc_class2 = _interopRequireDefault(_calc_class);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var getIngPanel = function getIngPanel(container) {
+	var getAddKeys = __webpack_require__(/*! ../helpers/additional_keys */ "./src/js/calculator/helpers/additional_keys.js");
+	var getIngAddKeys = document.createElement('div');
+	getIngAddKeys.classList.add("ingeneer");
+	getIngAddKeys.innerHTML = getAddKeys.ingenering;
+	var additionalKeysBlock = document.getElementById(container).getElementsByClassName("calculator__additional-keys-block")[0];
+	var elem = additionalKeysBlock.querySelector('div');
+	if (elem) {
+		additionalKeysBlock.removeChild(elem);
+	}
+	additionalKeysBlock.appendChild(getIngAddKeys);
+};
+
 var getSimpleMode = function getSimpleMode(container) {
 	var closeIngPanels = function closeIngPanels() {
-		var additionalKeysBlock = document.getElementById(container).getElementsByClassName("additionalKeysBlock")[0];
+		var additionalKeysBlock = document.getElementById(container).getElementsByClassName("calculator__additional-keys-block")[0];
 		var elem = additionalKeysBlock.querySelector('div');
 		if (elem) {
 			additionalKeysBlock.removeChild(elem);
 		};
 	};
 	closeIngPanels();
-	_calcFactory2.default.makeSimple(container);
+	_calc_class2.default.makeSimple(container);
 };
+
 var getEngMode = function getEngMode(container) {
-	_calcFactory2.default.makeIngenering(container);
+	getIngPanel(container);
+	_calc_class2.default.makeIngenering(container);
 };
 
 function changeMode(container) {
@@ -850,10 +509,10 @@ exports.default = changeMode;
 
 /***/ }),
 
-/***/ "./src/js/calculator/view/chTheme.js":
-/*!*******************************************!*\
-  !*** ./src/js/calculator/view/chTheme.js ***!
-  \*******************************************/
+/***/ "./src/js/calculator/view/ch_theme.js":
+/*!********************************************!*\
+  !*** ./src/js/calculator/view/ch_theme.js ***!
+  \********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -894,9 +553,9 @@ exports.default = changeTheme;
 
 /***/ }),
 
-/***/ "./src/js/calculator/view/switchCalcHistBlock.js":
+/***/ "./src/js/calculator/view/switch_calc_history.js":
 /*!*******************************************************!*\
-  !*** ./src/js/calculator/view/switchCalcHistBlock.js ***!
+  !*** ./src/js/calculator/view/switch_calc_history.js ***!
   \*******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -907,7 +566,7 @@ exports.default = changeTheme;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-var clearHistory = __webpack_require__(/*! ../helpers/clearHistory */ "./src/js/calculator/helpers/clearHistory.js");
+var clearHistory = __webpack_require__(/*! ../helpers/clear_history */ "./src/js/calculator/helpers/clear_history.js");
 
 var closeHistBlock = function closeHistBlock(container) {
 	var elem = document.getElementById(container).getElementsByClassName('calculator__display-hist')[0];
@@ -940,6 +599,385 @@ function switchCalcHistBlock(container) {
 	};
 };
 exports.default = switchCalcHistBlock;
+
+/***/ }),
+
+/***/ "./src/js/calculator/сalc_factory/calc_class.js":
+/*!******************************************************!*\
+  !*** ./src/js/calculator/сalc_factory/calc_class.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SimpleCalculator = function () {
+  _createClass(SimpleCalculator, [{
+    key: "getOperand",
+    value: function getOperand(calcOp) {
+      var getOperandChar = __webpack_require__(/*! ../helpers/get_operand */ "./src/js/calculator/helpers/get_operand.js");
+      var result = void 0;
+
+      switch (calcOp) {
+        case "plus":
+          result = getOperandChar.plus;break;
+        case "minus":
+          result = getOperandChar.minus;break;
+        case "times":
+          result = getOperandChar.times;break;
+        case "divide":
+          result = getOperandChar.divide;break;
+        case "pow2":
+          result = getOperandChar.pow2;break;
+        default:
+          result = '&nbsp';
+      }
+      return result;
+    }
+  }, {
+    key: "getCalculate",
+    value: function getCalculate(calcOper, oldNum, currNum, proc) {
+      var utils = __webpack_require__(/*! ../helpers/utils */ "./src/js/calculator/helpers/utils.js");
+      var result = void 0;
+
+      switch (calcOper) {
+        case "plus":
+          result = utils.sum(oldNum, currNum, proc);break;
+        case "minus":
+          result = utils.minus(oldNum, currNum, proc);break;
+        case "times":
+          result = utils.times(oldNum, currNum, proc);break;
+        case "divide":
+          result = utils.divide(oldNum, currNum, proc);break;
+        case "pow2":
+          result = utils.pow2(oldNum);break;
+        /* если = был нажат без оператора, сохраняем число и гоним дальше */
+        default:
+          result = currNum;
+      };
+      return result;
+    }
+  }]);
+
+  function SimpleCalculator(containerId) {
+    _classCallCheck(this, SimpleCalculator);
+
+    /*подключаем историю*/
+    var calcHistory = __webpack_require__(/*! ../helpers/calc_history */ "./src/js/calculator/helpers/calc_history.js");
+    var getOperandChar = __webpack_require__(/*! ../helpers/get_operand */ "./src/js/calculator/helpers/get_operand.js");
+    var utils = __webpack_require__(/*! ../helpers/utils */ "./src/js/calculator/helpers/utils.js");
+
+    /*объявляем переменные*/
+    var opChar;
+    var self = this;
+    this.container = containerId;
+    self.calcBlock;
+    self.opChar;
+    self.resNum;
+    self.oldnum;
+    self.currNum;
+    self.proc;
+    self.calcBlock = document.getElementById(self.container); /* находим контейнер в котором будем запускать */
+
+    var display = self.calcBlock.getElementsByClassName('calculator__display')[0],
+        /* дисплей калькулятора */
+    displayUpper = self.calcBlock.getElementsByClassName('calculator__display-upper')[0],
+        /* верхний дисплей */
+    result = self.calcBlock.getElementsByClassName("calculator__result")[0],
+        /* кнопка равно */
+    clear = self.calcBlock.getElementsByClassName("calculator__clear")[0],
+        /* кнопка C */
+    calculatorNum = self.calcBlock.getElementsByClassName("calculator__num"),
+        /* кнопки чисел */
+    calculatorOps = self.calcBlock.getElementsByClassName("calculator__ops"),
+        /* кнопки операторов */
+    resNum,
+        /* Для сохранения результата */
+    oldNum = "",
+        /* сюда кладем первый операнд */
+    currNum = "",
+        /* сюда последующий операнд */
+    calcOperator,
+        /* какой оператор будем использовать */
+    proc = false; /* будем ли использовать проценты */
+
+    var showResToUpperDisp = function showResToUpperDisp() {
+      displayUpper.innerHTML = "" + self.UpperDisp.UoldNum + self.UpperDisp.UcalcOperator + self.UpperDisp.UcurrNum + self.UpperDisp.Uproc;
+    };
+    var clearUpperDisp = function clearUpperDisp() {
+      self.UpperDisp = { UoldNum: "", UcurrNum: "", UcalcOperator: "", Uproc: "", UresNum: "" };
+    };
+
+    /* Создаем объект с переменными2 */
+    self.UpperDisp = {
+      UoldNum: "",
+      UcurrNum: "",
+      UcalcOperator: "",
+      Uproc: "",
+      UresNum: ""
+    };
+
+    /*собственно логика*/
+
+    /* если: клик по числу */
+    var setNum = function setNum() {
+      if (resNum) {
+        /* number если на дисплее отражен результат */
+        currNum = this.getAttribute("data-num"); /* заносим в переменную */
+        resNum = "";
+      } else {
+        /* если нет, добавляем число в  предыдущий операнд */
+        currNum += this.getAttribute("data-num");
+      }
+
+      display.innerHTML = currNum; /* Отобразить второй операнд */
+      self.UpperDisp.UcurrNum = currNum;
+    };
+
+    /* если: клик был по оператору. записываем число в oldNum и сохраняем значение оператора */
+    var moveNum = function moveNum() {
+
+      if (this.getAttribute("data-ops") !== 'proc' && this.getAttribute("data-ops") !== 'opReverse') {
+
+        if (oldNum == "") {
+          oldNum = currNum;
+          currNum = "";
+          self.UpperDisp.UoldNum = oldNum;
+          self.UpperDisp.UcurrNum = "";
+          self.operator = this.getAttribute("data-ops");
+          calcOperator = self.operator;
+          self.UpperDisp.UcalcOperator = self.operator;
+          showResToUpperDisp();
+        } else {
+          currNum = currNum;
+          self.UpperDisp.UcurrNum = currNum;
+          showResToUpperDisp();
+        }
+      } else if (this.getAttribute("data-ops") == 'opReverse' && this.getAttribute("data-ops") != 'proc') {
+        currNum = utils.opReverse(currNum);
+        self.UpperDisp.UcurrNum = currNum;
+        showResToUpperDisp();
+      } else if (this.getAttribute("data-ops") == 'proc') {
+        proc = true;
+        self.UpperDisp.UcurrNum = currNum;
+      }
+
+      /* console.log("First= " + oldNum + "; opper= " + calcOperator + "; Second= " + currNum + "; proc= " + proc);*/
+
+      self.opChar = self.getOperand(calcOperator);
+
+      /*если процент не был нажат*/
+      if (!proc) {
+        self.UpperDisp.UcalcOperator = self.opChar;
+        showResToUpperDisp();
+      } else {
+        /*если был то вычисляем с процентами*/
+        self.UpperDisp.UoldNum = oldNum;
+        self.UpperDisp.UcalcOperator = self.opChar;
+        self.UpperDisp.UcurrNum = currNum;
+        self.UpperDisp.Uproc = getOperandChar.proc;
+        showResToUpperDisp();
+      };
+      result.setAttribute("data-result", ""); /* сбрасываем аттрибут на = */
+    };
+
+    /* если: клик был по =. вычисляем результат */
+    var displayNum = function displayNum() {
+      self.UpperDisp.UcurrNum = currNum;
+
+      /* выполняем преобразование в числа с плавающей точкой */
+      oldNum = parseFloat(oldNum);
+      currNum = parseFloat(currNum);
+
+      /* выполняем операцию */
+      self.resNum = self.getCalculate(calcOperator, oldNum, currNum, proc);
+      resNum = self.resNum;
+      self.UpperDisp.UresNum = self.resNum;
+      showResToUpperDisp();
+
+      /* если результат вычислений вернул NaN или бесконечность */
+      if (!isFinite(resNum)) {
+        if (isNaN(resNum)) {
+          /* если результат NaN */
+          resNum = "Wrong result";
+        } else {
+          /* если в результате деления на ноль результат бесконечность */
+          resNum = "Divide by ZERO!!!!";
+          calcBlock.classList.add("broken"); /* ломаем калькулятор */
+        }
+      }
+      /* если результат получен и он не NaN и не бесконечность показываем результат */
+      display.innerHTML = resNum;
+      self.UpperDisp.UresNum = self.resNum;
+      /* console.log(`${self.UpperDisp.UoldNum}${self.UpperDisp.UcalcOperator}${self.UpperDisp.UcurrNum}${self.UpperDisp.Uproc}=${self.UpperDisp.UresNum}`);*/
+      calcHistory(self.UpperDisp, containerId);
+      result.setAttribute("data-result", resNum);
+
+      /* и обнуление переменных */
+      oldNum = "";
+      proc = false;
+      currNum = resNum;
+      showResToUpperDisp();
+      clearUpperDisp();
+    };
+    /* клик по кнопке С. обнуляем все. */
+    var clearAll = function clearAll() {
+      oldNum = "";
+      currNum = "";
+      display.innerHTML = "0";
+      result.setAttribute("data-result", resNum);
+      proc = false;
+      self.operator = "&nbsp";
+      calcOperator = "&nbsp";
+      self.UpperDisp = {
+        UoldNum: "",
+        UcurrNum: "",
+        UcalcOperator: "&nbsp",
+        Uproc: "",
+        UresNum: ""
+      };
+      clearUpperDisp();
+      showResToUpperDisp();
+    };
+
+    /* эвент на клик числа */
+    for (var i = 0, l = calculatorNum.length; i < l; i++) {
+      calculatorNum[i].onclick = setNum;
+    }
+    /* эвент на клик оператора */
+    for (var _i = 0, _l = calculatorOps.length; _i < _l; _i++) {
+      calculatorOps[_i].onclick = moveNum;
+    }
+    /* эвент на клик равно */
+    result.onclick = displayNum;
+
+    /**/
+
+    /* клик на С */
+    clear.onclick = clearAll;
+
+    /*конец логики*/
+  }
+
+  return SimpleCalculator;
+}();
+
+;
+
+var IngCalculator = function (_SimpleCalculator) {
+  _inherits(IngCalculator, _SimpleCalculator);
+
+  function IngCalculator() {
+    _classCallCheck(this, IngCalculator);
+
+    return _possibleConstructorReturn(this, (IngCalculator.__proto__ || Object.getPrototypeOf(IngCalculator)).apply(this, arguments));
+  }
+
+  _createClass(IngCalculator, [{
+    key: "getOperand",
+    value: function getOperand(calcOp) {
+      var getOperandChar = __webpack_require__(/*! ../helpers/get_operand */ "./src/js/calculator/helpers/get_operand.js");
+      var result = void 0;
+
+      switch (calcOp) {
+        case "plus":
+          result = getOperandChar.plus;break;case "minus":
+          result = getOperandChar.minus;break;
+        case "times":
+          result = getOperandChar.times;break;case "divide":
+          result = getOperandChar.divide;break;
+        case "opReverse":
+          result = getOperandChar.sqrt;break;case "pow2":
+          result = getOperandChar.pow2;break;
+        case "powten":
+          result = getOperandChar.powten;break;case "pow3":
+          result = getOperandChar.pow3;break;
+        case "root3":
+          result = getOperandChar.root3;break;case "powY":
+          result = getOperandChar.powY;break;
+        case "factorial":
+          result = getOperandChar.fact;break;case "sqrt":
+          result = getOperandChar.sqrt;break;
+        case "cos":
+          result = getOperandChar.cos;break;case "sin":
+          result = getOperandChar.sin;break;
+        case "log":
+          result = getOperandChar.log;break;case "ln":
+          result = getOperandChar.ln;break;
+      }
+      return result;
+    }
+  }, {
+    key: "getCalculate",
+    value: function getCalculate(calcOper, oldNum, currNum, proc) {
+      var utils = __webpack_require__(/*! ../helpers/utils */ "./src/js/calculator/helpers/utils.js");
+      var result = void 0;
+
+      switch (calcOper) {
+        case "plus":
+          result = utils.sum(oldNum, currNum, proc);break;case "minus":
+          result = utils.minus(oldNum, currNum, proc);break;
+        case "times":
+          result = utils.times(oldNum, currNum, proc);break;case "divide":
+          result = utils.divide(oldNum, currNum, proc);break;
+        case "opReverse":
+          result = utils.sqrt(oldNum);break;case "pow2":
+          result = utils.pow2(oldNum);break;
+        case "powten":
+          result = utils.powten(oldNum);break;case "pow3":
+          result = utils.pow3(oldNum);break;
+        case "root3":
+          result = utils.root3(oldNum);break;case "powY":
+          result = utils.powY(oldNum, currNum);break;
+        case "factorial":
+          result = utils.factorial(oldNum);break;case "sqrt":
+          result = utils.sqrt(oldNum);break;
+        case "cos":
+          result = utils.cos(oldNum);break;case "sin":
+          result = utils.sin(oldNum);break;
+        case "log":
+          result = utils.log(oldNum);break;case "ln":
+          result = utils.ln(oldNum);break;
+
+        default:
+          result = currNum;
+      };
+      return result;
+    }
+  }]);
+
+  return IngCalculator;
+}(SimpleCalculator);
+
+;
+
+function CalcFactory() {};
+CalcFactory.prototype = {
+
+  makeSimple: function makeSimple(container) {
+    return new SimpleCalculator(container);
+  },
+  makeIngenering: function makeIngenering(container) {
+    return new IngCalculator(container);
+  },
+  constructor: CalcFactory
+};
+var CalcFactory = new CalcFactory();
+
+exports.default = CalcFactory;
 
 /***/ }),
 

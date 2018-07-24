@@ -1,13 +1,14 @@
 "use strict";
-import CalcFactory  from './CalcFactory/calcFactory.js';
-import changeTheme  from './view/chTheme.js';
-import changeMode  from './view/chMode.js';
-import switchCalcHistBlock from './view/switchCalcHistBlock.js';
-import showHistory from './helpers/showHistory.js';
+/*import CalcFactory  from './calc_factory/calc_factory.js';*/
+import CalcFactory  from './сalc_factory/calc_class.js';
+import changeTheme  from './view/ch_theme.js';
+import changeMode  from './view/ch_mode.js';
+import switchCalcHistBlock from './view/switch_calc_history.js';
+import showHistory from './helpers/show_history.js';
 
 function CalcInit(container){
 
-CalcFactory.makeSimple(container);
+CalcFactory.makeIngenering(container);
 new changeTheme(container);
 new changeMode(container);
 new switchCalcHistBlock(container);

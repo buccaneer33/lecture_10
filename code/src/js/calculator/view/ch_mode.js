@@ -1,16 +1,31 @@
 'use strict';
-import CalcFactory  from '../CalcFactory/calcFactory.js';
+import CalcFactory  from '../сalc_factory/calc_class.js';
+var getIngPanel = (container) => {
+		let getAddKeys = require('../helpers/additional_keys');
+		let getIngAddKeys = document.createElement('div');
+		getIngAddKeys.classList.add("ingeneer");
+		getIngAddKeys.innerHTML = getAddKeys.ingenering;
+		let additionalKeysBlock = document.getElementById(container).getElementsByClassName("calculator__additional-keys-block")[0];
+		let elem = additionalKeysBlock.querySelector('div');
+		if (elem){additionalKeysBlock.removeChild(elem);}
+		additionalKeysBlock.appendChild(getIngAddKeys);
+};
+
+
 
 var getSimpleMode = function(container) {
 	var closeIngPanels = ()=>{
-			var additionalKeysBlock = document.getElementById(container).getElementsByClassName("additionalKeysBlock")[0];
+			var additionalKeysBlock = document.getElementById(container).getElementsByClassName("calculator__additional-keys-block")[0];
 				let elem = additionalKeysBlock.querySelector('div');
 				if(elem){additionalKeysBlock.removeChild(elem);};
 };
 	closeIngPanels();
 	CalcFactory.makeSimple(container);
 };
+
+
 var getEngMode = function(container){
+	getIngPanel(container);
 	CalcFactory.makeIngenering(container);
 };
 

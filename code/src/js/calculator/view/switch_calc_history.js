@@ -1,5 +1,5 @@
 'use strict';
-var  clearHistory = require('../helpers/clearHistory');
+var  clearHistory = require('../helpers/clear_history');
 
 var closeHistBlock = function(container) {
 	let elem = document.getElementById(container).getElementsByClassName('calculator__display-hist')[0];

@@ -1,19 +1,20 @@
+/*VARIABLES*/
 const path              = require('path');
 const ExtractTextPlugin = require ('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-let 	FaviconsWebpack   = require('favicons-webpack-plugin');
-var 	sass              = require('sass');
-var 	postcss    				= require('postcss');
-const Constants         = require("./constants");
-const autoprefixer      = require('autoprefixer');
-const EVENT = process.env.npm_lifecycle_event || '';
-const PROD = EVENT.includes('prod');
-const DEV = EVENT.includes('dev');
-var pathToDist = PROD ? (pathToDist = 'dist/prod') : (pathToDist = 'dist/dev');
-var ConfMode = 	PROD ? (ConfMode = Constants.WEBPACK_MODE_PROD) : (ConfMode = Constants.WEBPACK_MODE_DEV);
+let   faviconsWebpack   = require('favicons-webpack-plugin');
+var   sass              = require('sass');
+var   postcss    		= require('postcss');
+const CONSTANTS         = require("./constants");
+const AUTOPREFIXER      = require('autoprefixer');
+const EVENT 			= process.env.npm_lifecycle_event || '';
+const PROD 				= EVENT.includes('prod');
+const DEV 				= EVENT.includes('dev');
+var   pathToDist 		= PROD ? ('dist/prod') : ('dist/dev');
+var   confMode 			= PROD ? (CONSTANTS.WEBPACK_MODE_PROD) : (CONSTANTS.WEBPACK_MODE_DEV);
+var   postCssLoader 	= PROD ? ({plugins: [AUTOPREFIXER({browsers:['ie >= 8', 'last 12 version']})],sourceMap: false}) : ({sourceMap: true});
 
-
-////////////////
+/*CONFIG*/
 
 var clientConfig = (function webpackConfig() {
   var config = Object.assign({});
@@ -34,10 +35,10 @@ var clientConfig = (function webpackConfig() {
 				use: ExtractTextPlugin.extract({
 				fallback: "style-loader",
 					use: [
-						PROD ? {loader: 'css-loader', options: {url: false,minimize: true,sourceMap: false}} : {loader: 'css-loader', options: {url: false,minimize: false,sourceMap: true}}  ,
-						PROD ? {loader: 'postcss-loader', options: {plugins: [autoprefixer({browsers:['ie >= 8', 'last 12 version']})],sourceMap: false}} : {loader: 'postcss-loader', options: {sourceMap: true}}  ,
-						PROD ? {loader: 'sass-loader', options: {sourceMap: false}} : {loader: 'sass-loader', options: {sourceMap: true}}
-					],	publicPath:'./css/'
+						{loader: 'css-loader', options: {url: false,minimize: PROD,sourceMap: DEV}},
+						{loader: 'postcss-loader', options:postCssLoader},
+						{loader: 'sass-loader', options: {sourceMap: DEV}}
+					], publicPath:'./css/'
 				})
 			},
 			
@@ -70,15 +71,15 @@ var clientConfig = (function webpackConfig() {
 		  "chunks": {"head": {"entry": "",  "css": [ "css/index.css" ]},
                  "main": {"entry": "js/main.js", "css": []}},
 	    },
-	    title: Constants.HTML_TITLE,
-	    author: Constants.HTML_AUTHOR,
-			mode: ConfMode,
+	    title: CONSTANTS.HTML_TITLE,
+	    author: CONSTANTS.HTML_AUTHOR,
+		mode: confMode,
 			
 	    minify: {collapseWhitespace: true},
 	    filename: 'index.html',
 	    template: './src/html/template/index.html'
         }),
-	  new FaviconsWebpack({
+	  new faviconsWebpack({
         logo: './src/img/favicon/favicon.jpg',
         prefix: 'img/favicon/',    
         emitStats: false,

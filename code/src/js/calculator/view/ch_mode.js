@@ -1,10 +1,22 @@
 'use strict';
 import CalcFactory  from '../сalc_factory/calc_class.js';
+import webSocketPress from '../websocket/websocket.js';
+
 var getIngPanel = (container) => {
 		let getAddKeys = require('../helpers/additional_keys');
 		let getIngAddKeys = document.createElement('div');
 		getIngAddKeys.classList.add("ingeneer");
 		getIngAddKeys.innerHTML = getAddKeys.ingenering;
+		let additionalKeysBlock = document.getElementById(container).getElementsByClassName("calculator__additional-keys-block")[0];
+		let elem = additionalKeysBlock.querySelector('div');
+		if (elem){additionalKeysBlock.removeChild(elem);}
+		additionalKeysBlock.appendChild(getIngAddKeys);
+};
+var getPressPanel = (container) => {
+		let getAddKeys = require('../helpers/additional_keys');
+		let getIngAddKeys = document.createElement('div');
+		getIngAddKeys.classList.add("pressure");
+		getIngAddKeys.innerHTML = getAddKeys.press;
 		let additionalKeysBlock = document.getElementById(container).getElementsByClassName("calculator__additional-keys-block")[0];
 		let elem = additionalKeysBlock.querySelector('div');
 		if (elem){additionalKeysBlock.removeChild(elem);}
@@ -23,16 +35,21 @@ var getSimpleMode = function(container) {
 	CalcFactory.makeSimple(container);
 };
 
-
 var getEngMode = function(container){
 	getIngPanel(container);
 	CalcFactory.makeIngenering(container);
+};
+
+var getPressMode = function(container){
+	getPressPanel(container);
+	new webSocketPress(container);
 };
 
 function changeMode(container) {
 	let elem = document.getElementById(container).getElementsByClassName('submenu__mode')[0];
 	this.eng = function() {getEngMode(container);};
 	this.simple = function() {getSimpleMode(container);};
+		this.press = function() {getPressMode(container);};
 	var self = this;
 	elem.onclick = function(e) {
 

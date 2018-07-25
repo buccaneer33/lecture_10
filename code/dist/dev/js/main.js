@@ -136,7 +136,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function CalcInit(container) {
 
-  _calc_class2.default.makeIngenering(container);
+  _calc_class2.default.makeSimple(container);
   new _ch_theme2.default(container);
   new _ch_mode2.default(container);
   new _switch_calc_history2.default(container);
@@ -157,7 +157,8 @@ exports.default = CalcInit;
 
 
 var getAdditionalKeys = {
-	ingenering: '<button data-ops="ln" class="calculator__ops">ln</button><button data-ops="log" class="calculator__ops">log</button><button data-ops="sin" class="calculator__ops">sin</button><button data-ops="cos" class="calculator__ops">cos</button><button  data-ops="sqrt" class="calculator__ops">&radic;</button><button data-ops="factorial" class="calculator__ops">n!</button><button data-ops="powY" class="calculator__ops">x&#696;</button><button data-ops="root3" class="calculator__ops">&#8731;x</button><button data-ops="pow3" class="calculator__ops">x&#179;</button><button data-ops="powten" class="calculator__ops">10&#739;</button>'
+	ingenering: '<button data-ops="ln" class="calculator__ops">ln</button><button data-ops="log" class="calculator__ops">log</button><button data-ops="sin" class="calculator__ops">sin</button><button data-ops="cos" class="calculator__ops">cos</button><button  data-ops="sqrt" class="calculator__ops">&radic;</button><button data-ops="factorial" class="calculator__ops">n!</button><button data-ops="powY" class="calculator__ops">x&#696;</button><button data-ops="root3" class="calculator__ops">&#8731;x</button><button data-ops="pow3" class="calculator__ops">x&#179;</button><button data-ops="powten" class="calculator__ops">10&#739;</button>',
+	press: '<form class="pressure__from"><label class="pressure__item"><input type="radio" data-pressure="mmMerc" name="pressureFrom" value="mmMerc" checked>мм. рт. ст</label></form><form class="pressure__to"><label class="pressure__item"><input type="radio" data-pressure="kPa" name="kPa" value="kPa" checked>kPa</label></form><button class="pressure__button" type="button">Вычислить</button>'
 };
 
 module.exports = getAdditionalKeys;
@@ -455,6 +456,10 @@ var _calc_class = __webpack_require__(/*! ../сalc_factory/calc_class.js */ "./s
 
 var _calc_class2 = _interopRequireDefault(_calc_class);
 
+var _websocket = __webpack_require__(/*! ../websocket/websocket.js */ "./src/js/calculator/websocket/websocket.js");
+
+var _websocket2 = _interopRequireDefault(_websocket);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var getIngPanel = function getIngPanel(container) {
@@ -462,6 +467,18 @@ var getIngPanel = function getIngPanel(container) {
 	var getIngAddKeys = document.createElement('div');
 	getIngAddKeys.classList.add("ingeneer");
 	getIngAddKeys.innerHTML = getAddKeys.ingenering;
+	var additionalKeysBlock = document.getElementById(container).getElementsByClassName("calculator__additional-keys-block")[0];
+	var elem = additionalKeysBlock.querySelector('div');
+	if (elem) {
+		additionalKeysBlock.removeChild(elem);
+	}
+	additionalKeysBlock.appendChild(getIngAddKeys);
+};
+var getPressPanel = function getPressPanel(container) {
+	var getAddKeys = __webpack_require__(/*! ../helpers/additional_keys */ "./src/js/calculator/helpers/additional_keys.js");
+	var getIngAddKeys = document.createElement('div');
+	getIngAddKeys.classList.add("pressure");
+	getIngAddKeys.innerHTML = getAddKeys.press;
 	var additionalKeysBlock = document.getElementById(container).getElementsByClassName("calculator__additional-keys-block")[0];
 	var elem = additionalKeysBlock.querySelector('div');
 	if (elem) {
@@ -487,6 +504,11 @@ var getEngMode = function getEngMode(container) {
 	_calc_class2.default.makeIngenering(container);
 };
 
+var getPressMode = function getPressMode(container) {
+	getPressPanel(container);
+	new _websocket2.default(container);
+};
+
 function changeMode(container) {
 	var elem = document.getElementById(container).getElementsByClassName('submenu__mode')[0];
 	this.eng = function () {
@@ -494,6 +516,9 @@ function changeMode(container) {
 	};
 	this.simple = function () {
 		getSimpleMode(container);
+	};
+	this.press = function () {
+		getPressMode(container);
 	};
 	var self = this;
 	elem.onclick = function (e) {
@@ -599,6 +624,51 @@ function switchCalcHistBlock(container) {
 	};
 };
 exports.default = switchCalcHistBlock;
+
+/***/ }),
+
+/***/ "./src/js/calculator/websocket/websocket.js":
+/*!**************************************************!*\
+  !*** ./src/js/calculator/websocket/websocket.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function webSocketPress(container) {
+  // open connection
+  var socket = new WebSocket("ws://localhost:8081");
+
+  document.getElementById(container).querySelector('.pressure__button').onclick = function () {
+    //var outgoingMessage = this.message.value;
+    var display = document.getElementById(container).querySelector('.calculator__display');
+    var outgoingMessage = display.innerHTML;
+    socket.send(outgoingMessage);
+    var displayUpper = document.getElementById(container).querySelector('.calculator__display-upper');
+    displayUpper.innerHTML = outgoingMessage;
+    return false;
+
+    console.log('pressureFrom');
+  };
+
+  // input messages handler
+  socket.onmessage = function (event) {
+    var incomingMessage = event.data;
+    showMessage(incomingMessage);
+  };
+
+  // show message inside div#subscribe
+  function showMessage(message) {
+    var display = document.getElementById(container).querySelector('.calculator__display');
+    display.innerHTML = message;
+  };
+}
+exports.default = webSocketPress;
 
 /***/ }),
 

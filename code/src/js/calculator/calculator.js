@@ -8,7 +8,7 @@ import showHistory from './helpers/show_history.js';
 
 function CalcInit(container){
 
-CalcFactory.makeIngenering(container);
+CalcFactory.makeSimple(container);
 new changeTheme(container);
 new changeMode(container);
 new switchCalcHistBlock(container);

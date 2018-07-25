@@ -143,6 +143,32 @@
   100% {
     transform: translate3d(0, -2000px, 0); } }
 
+.pressure {
+  display: flex;
+  flex-direction: row;
+  background-color: #ccc;
+  border-radius: 5px;
+  flex-wrap: wrap;
+  width: 220px;
+  justify-content: center;
+  padding: 5px 1px; }
+  .pressure__from {
+    width: 110px;
+    height: 100px; }
+  .pressure__to {
+    width: 110px;
+    height: 100px; }
+  .pressure__item {
+    width: 100%;
+    display: block;
+    padding: 5px; }
+  .pressure__button {
+    width: 50%;
+    height: 35px;
+    border-radius: 5px;
+    display: block;
+    padding: 5px; }
+
 .body--theme {
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;

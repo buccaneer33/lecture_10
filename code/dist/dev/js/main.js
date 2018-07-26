@@ -613,269 +613,63 @@ exports.default = switchCalcHistBlock;
 
 
 Object.defineProperty(exports, "__esModule", {
+     value: true
+});
+
+var _simple_calc = __webpack_require__(/*! ./classes/simple_calc.js */ "./src/js/calculator/сalc_factory/classes/simple_calc.js");
+
+var _simple_calc2 = _interopRequireDefault(_simple_calc);
+
+var _ing_cal = __webpack_require__(/*! ./classes/ing_calс.js */ "./src/js/calculator/сalc_factory/classes/ing_calс.js");
+
+var _ing_cal2 = _interopRequireDefault(_ing_cal);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function CalcFactory() {};
+CalcFactory.prototype = {
+
+     makeSimple: function makeSimple(container) {
+          return new _simple_calc2.default(container);
+     },
+     makeIngenering: function makeIngenering(container) {
+          return new _ing_cal2.default(container);
+     },
+     constructor: CalcFactory
+};
+var CalcFactory = new CalcFactory();
+
+exports.default = CalcFactory;
+
+/***/ }),
+
+/***/ "./src/js/calculator/сalc_factory/classes/ing_calс.js":
+/*!************************************************************!*\
+  !*** ./src/js/calculator/сalc_factory/classes/ing_calс.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _simple_calc = __webpack_require__(/*! ./simple_calc.js */ "./src/js/calculator/сalc_factory/classes/simple_calc.js");
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _simple_calc2 = _interopRequireDefault(_simple_calc);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var SimpleCalculator = function () {
-  _createClass(SimpleCalculator, [{
-    key: "getOperand",
-    value: function getOperand(calcOp) {
-      var getOperandChar = __webpack_require__(/*! ../helpers/get_operand */ "./src/js/calculator/helpers/get_operand.js");
-      var result = void 0;
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-      switch (calcOp) {
-        case "plus":
-          result = getOperandChar.plus;break;
-        case "minus":
-          result = getOperandChar.minus;break;
-        case "times":
-          result = getOperandChar.times;break;
-        case "divide":
-          result = getOperandChar.divide;break;
-        case "pow2":
-          result = getOperandChar.pow2;break;
-        default:
-          result = '&nbsp';
-      }
-      return result;
-    }
-  }, {
-    key: "getCalculate",
-    value: function getCalculate(calcOper, oldNum, currNum, proc) {
-      var utils = __webpack_require__(/*! ../helpers/utils */ "./src/js/calculator/helpers/utils.js");
-      var result = void 0;
-
-      switch (calcOper) {
-        case "plus":
-          result = utils.sum(oldNum, currNum, proc);break;
-        case "minus":
-          result = utils.minus(oldNum, currNum, proc);break;
-        case "times":
-          result = utils.times(oldNum, currNum, proc);break;
-        case "divide":
-          result = utils.divide(oldNum, currNum, proc);break;
-        case "pow2":
-          result = utils.pow2(oldNum);break;
-        /* если = был нажат без оператора, сохраняем число и гоним дальше */
-        default:
-          result = currNum;
-      };
-      return result;
-    }
-  }]);
-
-  function SimpleCalculator(containerId) {
-    _classCallCheck(this, SimpleCalculator);
-
-    /*подключаем историю*/
-    var calcHistory = __webpack_require__(/*! ../helpers/calc_history */ "./src/js/calculator/helpers/calc_history.js");
-    var getOperandChar = __webpack_require__(/*! ../helpers/get_operand */ "./src/js/calculator/helpers/get_operand.js");
-    var utils = __webpack_require__(/*! ../helpers/utils */ "./src/js/calculator/helpers/utils.js");
-
-    /*объявляем переменные*/
-    var opChar;
-    var self = this;
-    this.container = containerId;
-    self.calcBlock;
-    self.opChar;
-    self.resNum;
-    self.oldnum;
-    self.currNum;
-    self.proc;
-    self.calcBlock = document.getElementById(self.container); /* находим контейнер в котором будем запускать */
-
-    var display = self.calcBlock.getElementsByClassName('calculator__display')[0],
-        /* дисплей калькулятора */
-    displayUpper = self.calcBlock.getElementsByClassName('calculator__display-upper')[0],
-        /* верхний дисплей */
-    result = self.calcBlock.getElementsByClassName("calculator__result")[0],
-        /* кнопка равно */
-    clear = self.calcBlock.getElementsByClassName("calculator__clear")[0],
-        /* кнопка C */
-    calculatorNum = self.calcBlock.getElementsByClassName("calculator__num"),
-        /* кнопки чисел */
-    calculatorOps = self.calcBlock.getElementsByClassName("calculator__ops"),
-        /* кнопки операторов */
-    resNum,
-        /* Для сохранения результата */
-    oldNum = "",
-        /* сюда кладем первый операнд */
-    currNum = "",
-        /* сюда последующий операнд */
-    calcOperator,
-        /* какой оператор будем использовать */
-    proc = false; /* будем ли использовать проценты */
-
-    var showResToUpperDisp = function showResToUpperDisp() {
-      displayUpper.innerHTML = "" + self.UpperDisp.UoldNum + self.UpperDisp.UcalcOperator + self.UpperDisp.UcurrNum + self.UpperDisp.Uproc;
-    };
-    var clearUpperDisp = function clearUpperDisp() {
-      self.UpperDisp = { UoldNum: "", UcurrNum: "", UcalcOperator: "", Uproc: "", UresNum: "" };
-    };
-
-    /* Создаем объект с переменными2 */
-    self.UpperDisp = {
-      UoldNum: "",
-      UcurrNum: "",
-      UcalcOperator: "",
-      Uproc: "",
-      UresNum: ""
-    };
-
-    /*собственно логика*/
-
-    /* если: клик по числу */
-    var setNum = function setNum() {
-      if (resNum) {
-        /* number если на дисплее отражен результат */
-        currNum = this.getAttribute("data-num"); /* заносим в переменную */
-        resNum = "";
-      } else {
-        /* если нет, добавляем число в  предыдущий операнд */
-        currNum += this.getAttribute("data-num");
-      }
-
-      display.innerHTML = currNum; /* Отобразить второй операнд */
-      self.UpperDisp.UcurrNum = currNum;
-    };
-
-    /* если: клик был по оператору. записываем число в oldNum и сохраняем значение оператора */
-    var moveNum = function moveNum() {
-
-      if (this.getAttribute("data-ops") !== 'proc' && this.getAttribute("data-ops") !== 'opReverse') {
-
-        if (oldNum == "") {
-          oldNum = currNum;
-          currNum = "";
-          self.UpperDisp.UoldNum = oldNum;
-          self.UpperDisp.UcurrNum = "";
-          self.operator = this.getAttribute("data-ops");
-          calcOperator = self.operator;
-          self.UpperDisp.UcalcOperator = self.operator;
-          showResToUpperDisp();
-        } else {
-          currNum = currNum;
-          self.UpperDisp.UcurrNum = currNum;
-          showResToUpperDisp();
-        }
-      } else if (this.getAttribute("data-ops") == 'opReverse' && this.getAttribute("data-ops") != 'proc') {
-        currNum = utils.opReverse(currNum);
-        self.UpperDisp.UcurrNum = currNum;
-        showResToUpperDisp();
-      } else if (this.getAttribute("data-ops") == 'proc') {
-        proc = true;
-        self.UpperDisp.UcurrNum = currNum;
-      }
-
-      /* console.log("First= " + oldNum + "; opper= " + calcOperator + "; Second= " + currNum + "; proc= " + proc);*/
-
-      self.opChar = self.getOperand(calcOperator);
-
-      /*если процент не был нажат*/
-      if (!proc) {
-        self.UpperDisp.UcalcOperator = self.opChar;
-        showResToUpperDisp();
-      } else {
-        /*если был то вычисляем с процентами*/
-        self.UpperDisp.UoldNum = oldNum;
-        self.UpperDisp.UcalcOperator = self.opChar;
-        self.UpperDisp.UcurrNum = currNum;
-        self.UpperDisp.Uproc = getOperandChar.proc;
-        showResToUpperDisp();
-      };
-      result.setAttribute("data-result", ""); /* сбрасываем аттрибут на = */
-    };
-
-    /* если: клик был по =. вычисляем результат */
-    var displayNum = function displayNum() {
-      self.UpperDisp.UcurrNum = currNum;
-
-      /* выполняем преобразование в числа с плавающей точкой */
-      oldNum = parseFloat(oldNum);
-      currNum = parseFloat(currNum);
-
-      /* выполняем операцию */
-      self.resNum = self.getCalculate(calcOperator, oldNum, currNum, proc);
-      resNum = self.resNum;
-      self.UpperDisp.UresNum = self.resNum;
-      showResToUpperDisp();
-
-      /* если результат вычислений вернул NaN или бесконечность */
-      if (!isFinite(resNum)) {
-        if (isNaN(resNum)) {
-          /* если результат NaN */
-          resNum = "Wrong result";
-        } else {
-          /* если в результате деления на ноль результат бесконечность */
-          resNum = "Divide by ZERO!!!!";
-          calcBlock.classList.add("broken"); /* ломаем калькулятор */
-        }
-      }
-      /* если результат получен и он не NaN и не бесконечность показываем результат */
-      display.innerHTML = resNum;
-      self.UpperDisp.UresNum = self.resNum;
-      /* console.log(`${self.UpperDisp.UoldNum}${self.UpperDisp.UcalcOperator}${self.UpperDisp.UcurrNum}${self.UpperDisp.Uproc}=${self.UpperDisp.UresNum}`);*/
-      calcHistory(self.UpperDisp, containerId);
-      result.setAttribute("data-result", resNum);
-
-      /* и обнуление переменных */
-      oldNum = "";
-      proc = false;
-      currNum = resNum;
-      showResToUpperDisp();
-      clearUpperDisp();
-    };
-    /* клик по кнопке С. обнуляем все. */
-    var clearAll = function clearAll() {
-      oldNum = "";
-      currNum = "";
-      display.innerHTML = "0";
-      result.setAttribute("data-result", resNum);
-      proc = false;
-      self.operator = "&nbsp";
-      calcOperator = "&nbsp";
-      self.UpperDisp = {
-        UoldNum: "",
-        UcurrNum: "",
-        UcalcOperator: "&nbsp",
-        Uproc: "",
-        UresNum: ""
-      };
-      clearUpperDisp();
-      showResToUpperDisp();
-    };
-
-    /* эвент на клик числа */
-    for (var i = 0, l = calculatorNum.length; i < l; i++) {
-      calculatorNum[i].onclick = setNum;
-    }
-    /* эвент на клик оператора */
-    for (var _i = 0, _l = calculatorOps.length; _i < _l; _i++) {
-      calculatorOps[_i].onclick = moveNum;
-    }
-    /* эвент на клик равно */
-    result.onclick = displayNum;
-
-    /**/
-
-    /* клик на С */
-    clear.onclick = clearAll;
-
-    /*конец логики*/
-  }
-
-  return SimpleCalculator;
-}();
-
-;
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var IngCalculator = function (_SimpleCalculator) {
   _inherits(IngCalculator, _SimpleCalculator);
@@ -887,9 +681,9 @@ var IngCalculator = function (_SimpleCalculator) {
   }
 
   _createClass(IngCalculator, [{
-    key: "getOperand",
+    key: 'getOperand',
     value: function getOperand(calcOp) {
-      var getOperandChar = __webpack_require__(/*! ../helpers/get_operand */ "./src/js/calculator/helpers/get_operand.js");
+      var getOperandChar = __webpack_require__(/*! ../../helpers/get_operand */ "./src/js/calculator/helpers/get_operand.js");
       var result = void 0;
 
       switch (calcOp) {
@@ -921,9 +715,9 @@ var IngCalculator = function (_SimpleCalculator) {
       return result;
     }
   }, {
-    key: "getCalculate",
+    key: 'getCalculate',
     value: function getCalculate(calcOper, oldNum, currNum, proc) {
-      var utils = __webpack_require__(/*! ../helpers/utils */ "./src/js/calculator/helpers/utils.js");
+      var utils = __webpack_require__(/*! ../../helpers/utils */ "./src/js/calculator/helpers/utils.js");
       var result = void 0;
 
       switch (calcOper) {
@@ -960,24 +754,101 @@ var IngCalculator = function (_SimpleCalculator) {
   }]);
 
   return IngCalculator;
-}(SimpleCalculator);
+}(_simple_calc2.default);
 
 ;
+exports.default = IngCalculator;
 
-function CalcFactory() {};
-CalcFactory.prototype = {
+/***/ }),
 
-  makeSimple: function makeSimple(container) {
-    return new SimpleCalculator(container);
-  },
-  makeIngenering: function makeIngenering(container) {
-    return new IngCalculator(container);
-  },
-  constructor: CalcFactory
-};
-var CalcFactory = new CalcFactory();
+/***/ "./src/js/calculator/сalc_factory/classes/simple_calc.js":
+/*!***************************************************************!*\
+  !*** ./src/js/calculator/сalc_factory/classes/simple_calc.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
-exports.default = CalcFactory;
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SimpleCalculator = function () {
+  function SimpleCalculator(containerId) {
+    _classCallCheck(this, SimpleCalculator);
+
+    this.container = containerId;
+    this.calcBlock;
+    this.opChar;
+    this.resNum;
+    this.oldnum;
+    this.currNum;
+    this.calcOperator;
+    this.button;
+    this.proc = false;
+    console.log(this.container);
+
+    this.calcBlock = document.getElementById(this.container);
+    this.display = this.calcBlock.getElementsByClassName('calculator__display')[0];
+    this.result = document.querySelector("#" + this.container + " .calculator__result");
+    this.clear = document.querySelector("#" + this.container + " .calculator__clear");
+    this.displayUpper = document.querySelector("#" + this.container + " .calculator__display-upper");
+    this.calculatorNum = this.calcBlock.getElementsByClassName("calculator__num");
+    this.calculatorOps = this.calcBlock.getElementsByClassName("calculator__ops");
+    this.utils = __webpack_require__(/*! ../../helpers/utils */ "./src/js/calculator/helpers/utils.js");
+    this.getOperandChar = __webpack_require__(/*! ../../helpers/get_operand */ "./src/js/calculator/helpers/get_operand.js");
+    this.calcHistory = __webpack_require__(/*! ../../helpers/calc_history */ "./src/js/calculator/helpers/calc_history.js");
+
+    this.UpperDisp = {
+      UoldNum: "",
+      UcurrNum: "",
+      UcalcOperator: "",
+      Uproc: "",
+      UresNum: ""
+    };
+
+    this.Constant = "test";
+
+    this.observer();
+  }
+
+  _createClass(SimpleCalculator, [{
+    key: "observer",
+    value: function observer() {
+
+      for (var i = 0, l = this.calculatorNum.length; i < l; i++) {
+        this.button = this.calculatorNum[i];
+        this.button.addEventListener('click', this.setNum.bind(this));
+      }
+      //console.log(this.Constant);
+    }
+  }, {
+    key: "setNum",
+    value: function setNum() {
+      if (this.resNum) {
+        this.currNum = this.button.getAttribute("data-num");
+        this.resNum = "";
+      } else {
+        this.currNum += this.button.getAttribute("data-num");
+      };
+      console.log(this.currNum);
+      console.log(this.Constant);
+      this.display.innerHTML = this.currNum;
+      this.UpperDisp.UcurrNum = this.currNum;
+    }
+  }]);
+
+  return SimpleCalculator;
+}();
+
+;
+exports.default = SimpleCalculator;
 
 /***/ }),
 

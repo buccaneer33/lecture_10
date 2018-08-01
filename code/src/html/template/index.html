@@ -27,22 +27,25 @@
 					<li class="nav__item submenu--open">Вид:
 						<ul class="nav__submenu submenu">
 							<li class="submenu__item">Тема оформления:
-								<div class="submenu__theme">
+								<div>
 									<div>
-										<label><input type="radio" data-theme="dark"  checked>Темный</label>
+										<label><input class="submenu__theme" type="radio" name="theme1" data-theme="dark"  checked>Темный</label>
 									</div>
 									<div>
-										<label><input type="radio" data-theme="light">Светлый</label>
+										<label><input class="submenu__theme" type="radio" name="theme1" data-theme="light">Светлый</label>
 									</div>
 								</div>
 							</li>
 							<li class="submenu__item">Тип:
 								<div class="submenu__mode">
 									<div>
-										<label><input type="radio" data-mode="simple" name="simple" value="Простой" checked>Простой</label>
+										<label><input type="radio" data-mode="simple" name="mode1" value="Простой" checked>Простой</label>
 									</div>
 									<div>
-										<label><input type="radio" data-mode="eng" name="eng" value="Инженерный">Инженерный</label>
+										<label><input type="radio" data-mode="eng" name="mode1" value="Инженерный">Инженерный</label>
+									</div>
+									<div>
+										<label><input type="radio" data-mode="press" name="mode1" value="Давления">Давления</label>
 									</div>
 								</div>
 							</li>
@@ -53,10 +56,10 @@
 							<li class="submenu__item">История:
 								<div class="submenu__hist">
 									<div>
-										<label><input type="radio" data-hist="close" name="close" value="Закрыть" checked>Закрыть</label>
+										<label><input type="radio" data-hist="close" name="history1" value="Закрыть" checked>Закрыть</label>
 									</div>
 									<div>
-										<label><input type="radio" data-hist="open" name="open" value="Открыть">Открыть</label>
+										<label><input type="radio" data-hist="open" name="history1" value="Открыть">Открыть</label>
 									</div>
 									<div></div>
 									<div>
@@ -110,53 +113,53 @@
 				</div>
 			</div>
 			<div class="calculator calculator--theme-dark" id="calculator2">
-			<nav class="calculator__menu">
-				<ul class="nav">
-					<li class="nav__item submenu--open">Вид:
-						<ul class="nav__submenu submenu">
-							<li class="submenu__item">Тема оформления:
-								<div class="submenu__theme">
-									<div>
-										<label><input type="radio" data-theme="dark"  checked>Темный</label>
+				<nav class="calculator__menu">
+					<ul class="nav">
+						<li class="nav__item submenu--open">Вид:
+							<ul class="nav__submenu submenu">
+								<li class="submenu__item">Тема оформления:
+									<div class="submenu__theme">
+										<div>
+											<label><input class="submenu__theme" type="radio" name="theme2" data-theme="dark"  checked>Темный</label>
+										</div>
+										<div>
+											<label><input class="submenu__theme" type="radio" name="theme2" data-theme="light">Светлый</label>
+										</div>
 									</div>
-									<div>
-										<label><input type="radio" data-theme="light">Светлый</label>
+								</li>
+								<li class="submenu__item">Тип:
+									<div class="submenu__mode">
+										<div>
+											<label><input type="radio" data-mode="simple" name="mode2" value="Простой" checked>Простой</label>
+										</div>
+										<div>
+											<label><input type="radio" data-mode="eng" name="mode2" value="Инженерный">Инженерный</label>
+										</div>
 									</div>
-								</div>
-							</li>
-							<li class="submenu__item">Тип:
-								<div class="submenu__mode">
-									<div>
-										<label><input type="radio" data-mode="simple" name="simple" value="Простой" checked>Простой</label>
+								</li>
+							</ul>
+						</li>
+						<li class="nav__item submenu--open"> Опции:
+							<ul class="nav__submenu submenu">
+								<li class="submenu__item">История:
+									<div class="submenu__hist">
+										<div>
+											<label><input type="radio" data-hist="close" name="history2" value="Закрыть" checked>Закрыть</label>
+										</div>
+										<div>
+											<label><input type="radio" data-hist="open" name="history2" value="Открыть">Открыть</label>
+										</div>
+										<div></div>
+										<div>
+											<button type="button" data-hist="clear" class="">Очистить</button>
+										</div>
 									</div>
-									<div>
-										<label><input type="radio" data-mode="eng" name="eng" value="Инженерный">Инженерный</label>
-									</div>
-								</div>
-							</li>
-						</ul>
-					</li>
-					<li class="nav__item submenu--open"> Опции:
-						<ul class="nav__submenu submenu">
-							<li class="submenu__item">История:
-								<div class="submenu__hist">
-									<div>
-										<label><input type="radio" data-hist="close" name="close" value="Закрыть" checked>Закрыть</label>
-									</div>
-									<div>
-										<label><input type="radio" data-hist="open" name="open" value="Открыть">Открыть</label>
-									</div>
-									<div></div>
-									<div>
-										<button type="button" data-hist="clear" class="">Очистить</button>
-									</div>
-								</div>
-							</li>
+								</li>
 
-						</ul>
-					</li>
-				</ul>
-			</nav>
+							</ul>
+						</li>
+					</ul>
+				</nav>
 
 				<div  class="calculator__display-block">
 					<div  class="calculator__display-hist">

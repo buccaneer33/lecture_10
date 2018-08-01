@@ -1,5 +1,5 @@
 'use strict';
-import getAdditionalKeys from '../../helpers/additional_keys';
+/*import getAdditionalKeys from '../../helpers/additional_keys';*/
 
 class Navigation {
     constructor (container) {

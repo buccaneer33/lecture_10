@@ -12,18 +12,20 @@ var getCalcDark = function(container){
 
 	function changeTheme(container) {
 
-			let elem = document.getElementById(container).getElementsByClassName('submenu__theme')[0];
-			//console.log(elem);
-	    this.dark = function() {getCalcDark(container);};
-	    this.light = function() {getCalcLight(container);};
-	    var self = this;
-	    elem.onclick = function(e) {
-	      var target = e.target;
-	      var action = target.getAttribute('data-theme');
-	      if (action) {
-	        self[action]();
-	      }
-	    };
+			let elem = document.getElementById(container).getElementsByClassName('submenu__theme');
+			let click;
+
+					for (let i = 0;  i < elem.length; i++) {
+						let radio = elem[i];
+						radio.addEventListener('click', ()=>{click = radio.getAttribute('data-theme');
+						if(click=='dark'){getCalcDark(container)}
+						else if(click=='light'){getCalcLight(container)}
+					});
+					}
+
+
+
+
 	  };
 
 export default changeTheme;

@@ -1,7 +1,7 @@
 import SimpleCalculator  from './simple_calc.js';
 
 class IngCalculator extends SimpleCalculator{
-
+/*
  getOperand(calcOp) {
    let  getOperandChar = require('../../helpers/get_operand');
    let result;
@@ -35,6 +35,6 @@ class IngCalculator extends SimpleCalculator{
      default:  		 result = currNum;
     };
   return result;
- };
+ };*/
 };
 export default IngCalculator;

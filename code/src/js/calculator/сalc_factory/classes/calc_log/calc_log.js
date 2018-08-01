@@ -26,10 +26,10 @@ class CalcLog {
         }
     };
 
-    static pushToCalcLog (container, upperDisplay, oldNum, currNum, operand) {
+    static pushToCalcLog (container, oldNum, currNum, operand, result) {
 
         let elem = document.createElement('li');
-        elem.innerHTML = 123; // не забыть вставить результат
+        elem.innerHTML = `${oldNum}${operand}${currNum}`;
 
 
         this.calcLogList.appendChild(elem);
